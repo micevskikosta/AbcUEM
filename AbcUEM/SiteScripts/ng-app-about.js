@@ -15,3 +15,4 @@ var AboutController = (function (_super) {
     return AboutController;
 })(Global);
 angular.module("AbcUEM").controller("AboutController", AboutController);
+//# sourceMappingURL=ng-app-about.js.map

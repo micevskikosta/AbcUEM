@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="col-lg-12 admin-panel-holder">
+    <div id="registerModal">
+        <form id="registerUser">
+            <div class="col-lg-12">
+                <p ng-show="infoEditedUserSuccess" class="alert alert-success"> Успешнa промена на корисник.</p>
+                <p ng-show="infoEditedUserError" class="alert alert-danger">Грешка. Не е извршена промена на корисник.</p>
+            </div>
+            <input type="text" hidden name="Id" ng-model="id" />
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <label class="name-label" for="name">Име</label>
+                    <input id="name" type="text" name="Name" ng-model="name" required />
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label" for="middleName">Средно име (опционално)</label>
+                    <input id="middleName" type="text" ng-model="middleName" />
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label" for="lastName">Презиме</label>
+                    <input id="lastName" type="text" name="LastName" ng-model="lastName" required />
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label" for="email">Елетронска пошта</label>
+                    <input id="email" type="email" name="Email" ng-model="email" required />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <label class="name-label" for="username">Корисничко име</label>
+                    <input id="username" type="text" name="UserName" ng-model="username" required />
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label" for="password">Лозинка</label>
+                    <input id="password" type="password" name="Password" ng-model="password" />
+                </div>
+                <div class="col-lg-12">
+                    <div id="passInfo" class="passInfo"></div>
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label" for="confirmPassword">Потврди лозинка</label>
+                    <input id="confirmPassword" type="password" name="ConfirmPassword" ng-model="confirmPassword" />
+                </div>
+                <div class="col-lg-12 passInfo" ng-show="divCheckPasswordMatch" id="divCheckPasswordMatch">
+
+                </div>
+                <div class="col-lg-12">
+                    <label class="name-label">Слика (опционално)</label>
+                    <input class="attach-modal" type="file" name="Photo" />
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <input id="saveEditUser" class="save-modal-admin" type="submit" ng-click="updateUser()" value="Зачувај" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

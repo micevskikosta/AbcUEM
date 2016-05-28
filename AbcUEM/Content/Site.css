@@ -91,6 +91,14 @@ body{
             background: #dcdcdc;
     }
 
+    .top-nav-container form{
+        float:right !important;
+    }
+    .top-nav-container form a{
+         margin-left: 5px;
+    }
+   
+
  /* Small devices (tablets, 768px and up) */
 @media (max-width: 1200px) {
     .nav-bar-buttons a {

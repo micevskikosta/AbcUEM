@@ -15,3 +15,4 @@ var GaleryController = (function (_super) {
     return GaleryController;
 })(Global);
 angular.module("AbcUEM").controller("GaleryController", GaleryController);
+//# sourceMappingURL=ng-app-galery.js.map

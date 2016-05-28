@@ -22,6 +22,12 @@ angular.module('AbcUEM').config(function ($routeProvider) {
         .when('/Contact', {
             templateUrl: '/Home/Contact'
         })
+        .when('/Login', {
+            templateUrl: '/Account/Login'
+        })
+        .when('/RegisterUser', {
+            templateUrl: '/Account/Register'
+        })
         .otherwise('/Info')
 });
 

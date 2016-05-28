@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
+using System.Web.Mvc;
 
 namespace AbcUEM.Models
 {
@@ -48,12 +50,12 @@ namespace AbcUEM.Models
 
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Внесете корисничко име")]
         [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        //[EmailAddress]
+        public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Внесете лозинка")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -64,25 +66,57 @@ namespace AbcUEM.Models
 
     public class RegisterViewModel
     {
+        public string Id { get; set; }
+
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Display(Name = "MiddleName")]
+        public string MiddleName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        public bool Active { get; set; }
+
+        public string RoleId { get; set; }
+
+        public string[] RoleDepartments { get; set; }
+
+        //public IEnumerable<SelectListItem> Roles { get; set; }
+
+        [Display(Name = "Photo")]
+        public HttpPostedFileBase Photo { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+.])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+.]{7,19}$")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+.])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+.]{7,19}$")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
     }
 
     public class ResetPasswordViewModel
     {
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -96,7 +130,7 @@ namespace AbcUEM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

@@ -1,41 +1,136 @@
-﻿@model AbcUEM.Models.RegisterViewModel
-@{
+﻿@{
     ViewBag.Title = "Register";
+    Layout = null;
 }
 
-<h2>@ViewBag.Title.</h2>
+<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 center-block height-100" ng-controller="ctrlRegisterUser">
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
-}
+    <table class="table">
+        <caption>
+            <b>{{from}}</b>–
+            <b>{{to}}</b> of
+            <b>{{total}}</b>
+            <button class="zmdi zmdi-chevron-left zmdi-hc-3x" ng-click="Previous()"><</button>
+            <button class="zmdi zmdi-chevron-right zmdi-hc-3x" ng-click="Next()">></button>
+            <input type="text" class="" placeholder="Пребарај" ng-keyup="search()" ng-minlength="3" ng-model="Search" />
+            <input class="new-user" type="button" data-toggle="modal" data-target="#updateModal" ng-click="ClearForm()" value="Додади" />
+        </caption>
+        <thead>
+            <tr>
+                <th>Корисничко име</th>
+                <th>Име</th>
+                <th>Презиме</th>
+                <th>Електронска пошта</th>
+                <th>Активен корисник</th>
+                <th>Промени</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in usersList">
+                <td>{{item.UserName}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.LastName}}</td>
+                <td>{{item.Email}}</td>
+                <td>
+                    <input type="checkbox" ng-checked="item.Active" ng-click="updateActiveUser($event, item.Id)" name="checkbox" />
+                </td>
+                <td>
+                    <input class="edit-button" type="button" data-toggle="modal" data-target="#updateModal" value="Промени" ng-click="getUser(item.Id) || getUserRoles(item.Id)" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    <div id="updateModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" ng-show="showRegisterRoles">Нов корисник</h4>
+                    <h4 class="modal-title" ng-show="showEditRoles">Промени корисник</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="registerUser">
+                        <div class="form-group">
+                            <input type="text" hidden name="Id" ng-model="id" />
+                            <label class="control-label" for="name">Име</label>
+                            <input class="form-control"  id="name" type="text" name="Name" ng-model="name" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="middleName">Средно име (опционално)</label>
+                            <input class="form-control" id="middleName" type="text" ng-model="middleName" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="lastName">Презиме</label>
+                            <input class="form-control" id="lastName" type="text" name="LastName" ng-model="lastName" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="email">Елетронска пошта</label>
+                            <input class="form-control" id="email" type="email" name="Email" ng-model="email" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="username">Корисничко име</label>
+                            <input class="form-control" id="username" type="text" name="UserName" ng-model="username" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="password">Лозинка* </label>
+                            <input class="form-control" id="password" type="password" name="Password" ng-model="password" />
+                            <div id="passInfo" class="passInfo"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="confirmPassword">Потврди лозинка</label>
+                            <input class="form-control" id="confirmPassword" type="password" name="ConfirmPassword" ng-model="confirmPassword" />
+                            <div class="passInfo" ng-show="divCheckPasswordMatch" id="divCheckPasswordMatch"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Слика (опционално)</label>
+                            <input class="form-control" type="file" name="Photo" />
+                        </div>
+
+                        <div ng-show="showRegisterRoles">
+                            <div class="form-group" ng-repeat="item in rolesList">
+                                <input class="" type="checkbox" id="{{item.Id}}" value="{{item.Name}}" ng-model="checkbox" name="checkboxRoles"
+                                       ng-click="addCheckedDepRoles($event,item.Name)" />
+                                <label class="control-label" for="{{item.Id}}">{{item.Name}}</label>
+                            </div>
+                            <div class="form-group" ng-repeat="item in departmentList">
+                                <input class="" type="checkbox" id="{{item.Id}}" value="{{item.Name}}" ng-model="checkbox2" name="checkboxDepartments"
+                                       ng-click="addCheckedDepRoles($event,item.Name)" />
+                                <label class="control-label" for="{{item.Id}}">{{item.Name}}</label>
+                            </div>
+                        </div>
+
+                        <div ng-show="showEditRoles">
+                            <div class="form-group" ng-repeat="item in rolesList">
+                                <input class="" type="checkbox" id="{{item.Name}}" value="{{item.Name}}" ng-model="checkbox" ng-checked="isChecked(item.Id)" name="checkbox"
+                                       ng-click="updateRolesSelection($event, item.Name)" />
+                                <label class="control-label" for="{{item.Name}}">{{item.Name}}</label>
+                            </div>
+                            <div class="form-group" ng-repeat="item in departmentList">
+                                <input class="" type="checkbox" id="{{item.Name}}" value="{{item.Name}}" ng-model="checkbox2" ng-checked="isChecked(item.Id)" name="checkbox"
+                                       ng-click="updateDepartmentSelection($event, item.Name)" />
+                                <label class="control-label" for="{{item.Name}}">{{item.Name}}</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div ng-show="showRegisterRoles">
+                        <input id="saveNewUser" class="btn btn-default" type="submit" ng-click="insertUser()" value="Сними" />
+                    </div>
+                    <div ng-show="showEditRoles">
+                        <input id="saveEditUser" class="btn btn-default" type="submit" ng-click="updateUser()" value="Зачувај" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+

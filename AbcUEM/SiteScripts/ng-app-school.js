@@ -15,3 +15,4 @@ var SchoolController = (function (_super) {
     return SchoolController;
 })(Global);
 angular.module("AbcUEM").controller("SchoolController", SchoolController);
+//# sourceMappingURL=ng-app-school.js.map

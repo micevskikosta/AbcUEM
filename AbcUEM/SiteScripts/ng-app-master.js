@@ -25,6 +25,12 @@ angular.module('AbcUEM').config(function ($routeProvider) {
         .when('/Contact', {
         templateUrl: '/Home/Contact'
     })
+        .when('/Login', {
+        templateUrl: '/Account/Login'
+    })
+        .when('/RegisterUser', {
+        templateUrl: '/Account/Register'
+    })
         .otherwise('/Info');
 });
 var MasterController = (function (_super) {
@@ -49,3 +55,4 @@ var MasterController = (function (_super) {
     return MasterController;
 })(Global);
 angular.module("AbcUEM").controller("MasterController", MasterController);
+//# sourceMappingURL=ng-app-master.js.map

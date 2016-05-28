@@ -15,3 +15,4 @@ var InfoController = (function (_super) {
     return InfoController;
 })(Global);
 angular.module("AbcUEM").controller("InfoController", InfoController);
+//# sourceMappingURL=ng-app-info.js.map

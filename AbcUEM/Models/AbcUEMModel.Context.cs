@@ -27,6 +27,12 @@ namespace AbcUEM.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Pages> Pages { get; set; }
         public virtual DbSet<Translates> Translates { get; set; }
     
@@ -37,6 +43,50 @@ namespace AbcUEM.Models
                 new ObjectParameter("PageId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTranslate_Result>("GetTranslate", pageIdParameter);
+        }
+    
+        public virtual ObjectResult<GetRoles_Result> GetRoles()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRoles_Result>("GetRoles");
+        }
+    
+        public virtual ObjectResult<GetUsers_Result> GetUsers(Nullable<int> pageIndex, Nullable<int> itemsPerPage, string seachString)
+        {
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("PageIndex", pageIndex) :
+                new ObjectParameter("PageIndex", typeof(int));
+    
+            var itemsPerPageParameter = itemsPerPage.HasValue ?
+                new ObjectParameter("ItemsPerPage", itemsPerPage) :
+                new ObjectParameter("ItemsPerPage", typeof(int));
+    
+            var seachStringParameter = seachString != null ?
+                new ObjectParameter("SeachString", seachString) :
+                new ObjectParameter("SeachString", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUsers_Result>("GetUsers", pageIndexParameter, itemsPerPageParameter, seachStringParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetUsersTotal(string seachString)
+        {
+            var seachStringParameter = seachString != null ?
+                new ObjectParameter("SeachString", seachString) :
+                new ObjectParameter("SeachString", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetUsersTotal", seachStringParameter);
+        }
+    
+        public virtual int UpdateActiveUser(string id, Nullable<bool> active)
+        {
+            var idParameter = id != null ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(string));
+    
+            var activeParameter = active.HasValue ?
+                new ObjectParameter("Active", active) :
+                new ObjectParameter("Active", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateActiveUser", idParameter, activeParameter);
         }
     }
 }

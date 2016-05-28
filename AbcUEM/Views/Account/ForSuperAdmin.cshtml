@@ -1,0 +1,40 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ForSuperAdmin</title>
+</head>
+<body>
+
+    @{
+        if (User.IsInRole("Administrator"))
+        {
+            <div>
+                for admin
+            </div>
+        }
+        if (User.IsInRole("SuperAdministrator"))
+        {
+            <div>
+                for super admin
+            </div>
+        }
+
+        if (User.IsInRole("User"))
+        {
+            <div>
+                for User
+            </div>
+        }
+    } 
+
+    
+
+</body>
+</html>

@@ -36,3 +36,4 @@ $(window).load(function () {
         });
     });
 });
+//# sourceMappingURL=global.js.map
