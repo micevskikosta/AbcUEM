@@ -2,7 +2,29 @@
 @{
     Layout = null;
 }
-
+<style>
+    .bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+    .bs-callout-warning {
+    border-left-color: rgb(185, 12, 6);
+}
+</style>
 <div ng-controller="InfoController as ic" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 center-block height-100">
-    <div class="inner-page">{{ic.infoPage}}</div>
+    <div class="inner-page">
+        @*{{ic.infoPage}}*@
+    <div id="InfoBoard" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <div class="bs-callout bs-callout-warning" id="callout-stacked-modals" ng-repeat="info in ic.InfoArray">
+            <h4>{{info.Title}}</h4>
+            <p>{{info.Description}}</p>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        novosti
+    </div>
+</div>
 </div>

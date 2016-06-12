@@ -1,11 +1,14 @@
 ﻿/// <reference path="global.ts" />
-
-class GaleryController extends Global {
-    private galeryPage: any;
-    constructor(public $scope, public $http: ng.IHttpService) {
-        super();
-        this.galeryPage = "Galery Page";
+namespace SiteScript.Galery {
+    import g = SiteScripts.Global;
+    import m = SiteScripts.Master;
+    class GaleryController extends g.Global {
+        private galeryPage: any;
+        constructor(public $scope, public $http: ng.IHttpService) {
+            super();
+            this.galeryPage = "Galery Page";
+        }
     }
-}
 
-angular.module("AbcUEM").controller("GaleryController", GaleryController);
+    angular.module("AbcUEM").controller("GaleryController", GaleryController);
+}

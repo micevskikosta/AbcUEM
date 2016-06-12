@@ -2,7 +2,22 @@
 @{
     Layout = null;
 }
+<link href="~/Content/schools.css" rel="stylesheet" />
 
 <div ng-controller="SchoolController as sc" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 center-block height-100">
-    <div class="inner-page">{{sc.schoolPage}}</div>
+    <div class="inner-page">
+        <div id="SchoolsTitle" class="title col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-bind-html="sc.SchoolsTitle">
+        </div>
+        <div id="SchoolsWithPictures" class="no-padding col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-repeat="school in sc.SchoolsWithPictures">
+                <div class="thumbnail">
+                    <img ng-src="{{school.ImgPath}}" />
+                    <div class="caption">
+                        <h4>{{school.Title}}</h4>
+                        <p ng-bind-html="sc.$sce.trustAsHtml(school.Description)"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

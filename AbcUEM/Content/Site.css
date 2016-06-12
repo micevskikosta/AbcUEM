@@ -3,7 +3,7 @@
 }
 
 body{
-    background-color:#fbfbf9 !important;
+    background-color:#f1f1f1 !important;
 }
 
 .height-100{
@@ -11,15 +11,22 @@ body{
 }
 
 .views {
-    height: calc(100% - 137px);
+    /*height: calc(100% - 137px);*/
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
- .inner-page{
-     height:100%;
-     background:white;
- }
+.inner-page {
+    float: left;
+    height: 100%;
+    background: white;
+    min-height: 550px;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
 .top-nav-container {
     background-color: rgb(185, 12, 6);
@@ -98,6 +105,10 @@ body{
          margin-left: 5px;
     }
    
+
+    .padding-20{
+        padding:20px;
+    }
 
  /* Small devices (tablets, 768px and up) */
 @media (max-width: 1200px) {

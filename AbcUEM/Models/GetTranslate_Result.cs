@@ -13,7 +13,13 @@ namespace AbcUEM.Models
     
     public partial class GetTranslate_Result
     {
-        public string NameFr { get; set; }
-        public string NameMk { get; set; }
+        public int Id { get; set; }
+        public string TitleMk { get; set; }
+        public string TitleFr { get; set; }
+        public string DescriptionMk { get; set; }
+        public string DescriptionFr { get; set; }
+        public string ImgPath { get; set; }
+        public string TagId { get; set; }
+        public Nullable<int> PageId { get; set; }
     }
 }

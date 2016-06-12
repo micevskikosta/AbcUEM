@@ -1,19 +1,31 @@
-﻿enum Languages { Mk, Fr }
-enum Pages { Master = 1 }
+﻿/// <reference path="_references.ts" />
 
-class Global {
-    public lang: Languages;
-    public setLang(lang: Languages) {
-        this.lang = lang;
+namespace SiteScripts.Global {
+    export enum Languages { Mk, Fr }
+    export enum Pages { Master = 1, Schools = 2, About = 3, Info = 4 }
+
+    export class Global {
+        public lang: Languages;
+        public $http: ng.IHttpService;
+        public $rootScope: ng.IRootScopeService;
+        public setLang(lang: Languages) {
+            this.lang = lang;
+            this.$rootScope.$broadcast('language', this.lang);
+        }
+
+        public getTranslateAsync(page: number, lang: number, tagId: string): angular.IPromise<any> {
+            return this.$http.get("/Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
+        }
     }
 }
+
 
 
 $(window).load(function () {
     //Toggle class on page load
     var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/#/") + 1);
     $(".nav-bar-buttons a").each(function () {
-        if ($(this).attr("href") == pgurl || $(this).attr("href") == '')
+        if ($(this).attr("href") == pgurl || $(this).attr("href") == '' || $(this).attr("href") == '#' + pgurl.split('#')[1])
             $(this).addClass("active");
 
         $(".nav-bar-buttons a").click(function (event) {

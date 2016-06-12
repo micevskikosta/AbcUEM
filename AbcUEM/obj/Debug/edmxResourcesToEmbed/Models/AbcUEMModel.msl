@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="AbcUEMDbModelStoreContainer" CdmEntityContainer="AbcUEMDbEntities">
-    <FunctionImportMapping FunctionImportName="GetTranslate" FunctionName="AbcUEMDbModel.Store.GetTranslate">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="AbcUEMDbModel.GetTranslate_Result">
-          <ScalarProperty Name="NameFr" ColumnName="NameFr" />
-          <ScalarProperty Name="NameMk" ColumnName="NameMk" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="GetRoles" FunctionName="AbcUEMDbModel.Store.GetRoles">
       <ResultMapping>
         <ComplexTypeMapping TypeName="AbcUEMDbModel.GetRoles_Result">
@@ -112,12 +104,43 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetTranslate" FunctionName="AbcUEMDbModel.Store.GetTranslate">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="AbcUEMDbModel.GetTranslate_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+          <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+          <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+          <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+          <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+          <ScalarProperty Name="PageId" ColumnName="PageId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="Translates">
       <EntityTypeMapping TypeName="AbcUEMDbModel.Translates">
         <MappingFragment StoreEntitySet="Translates">
           <ScalarProperty Name="PageId" ColumnName="PageId" />
-          <ScalarProperty Name="NameFr" ColumnName="NameFr" />
-          <ScalarProperty Name="NameMk" ColumnName="NameMk" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+          <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+          <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+          <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+          <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+          <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Calendar">
+      <EntityTypeMapping TypeName="AbcUEMDbModel.Calendar">
+        <MappingFragment StoreEntitySet="Calendar">
+          <ScalarProperty Name="end" ColumnName="end" />
+          <ScalarProperty Name="start" ColumnName="start" />
+          <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+          <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+          <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+          <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

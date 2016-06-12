@@ -68,6 +68,18 @@
     <Property Name="LastName" Type="nvarchar" MaxLength="50" />
     <Property Name="SysDate" Type="datetime" />
   </EntityType>
+  <EntityType Name="Calendar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleMk" Type="nvarchar(max)" />
+    <Property Name="TitleFr" Type="nvarchar(max)" />
+    <Property Name="DescriptionMk" Type="nvarchar(max)" />
+    <Property Name="DescriptionFr" Type="nvarchar(max)" />
+    <Property Name="start" Type="datetime" />
+    <Property Name="end" Type="datetime" />
+  </EntityType>
   <EntityType Name="Pages">
     <Key>
       <PropertyRef Name="Id" />
@@ -80,8 +92,12 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="NameMk" Type="nvarchar(max)" />
-    <Property Name="NameFr" Type="nvarchar(max)" />
+    <Property Name="TitleMk" Type="nvarchar(max)" />
+    <Property Name="TitleFr" Type="nvarchar(max)" />
+    <Property Name="DescriptionMk" Type="nvarchar(max)" />
+    <Property Name="DescriptionFr" Type="nvarchar(max)" />
+    <Property Name="ImgPath" Type="nvarchar" MaxLength="300" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="300" />
     <Property Name="PageId" Type="int" />
   </EntityType>
   <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -143,6 +159,7 @@
   <Function Name="GetRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetTranslate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="PageId" Type="int" Mode="In" />
+    <Parameter Name="TagId" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="GetUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="PageIndex" Type="int" Mode="In" />
@@ -163,6 +180,7 @@
     <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Translates" EntityType="Self.Translates" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">

@@ -73,6 +73,18 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="50" />
           <Property Name="SysDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="Calendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TitleMk" Type="nvarchar(max)" />
+          <Property Name="TitleFr" Type="nvarchar(max)" />
+          <Property Name="DescriptionMk" Type="nvarchar(max)" />
+          <Property Name="DescriptionFr" Type="nvarchar(max)" />
+          <Property Name="start" Type="datetime" />
+          <Property Name="end" Type="datetime" />
+        </EntityType>
         <EntityType Name="Pages">
           <Key>
             <PropertyRef Name="Id" />
@@ -85,8 +97,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NameMk" Type="nvarchar(max)" />
-          <Property Name="NameFr" Type="nvarchar(max)" />
+          <Property Name="TitleMk" Type="nvarchar(max)" />
+          <Property Name="TitleFr" Type="nvarchar(max)" />
+          <Property Name="DescriptionMk" Type="nvarchar(max)" />
+          <Property Name="DescriptionFr" Type="nvarchar(max)" />
+          <Property Name="ImgPath" Type="nvarchar" MaxLength="300" />
+          <Property Name="TagId" Type="nvarchar" MaxLength="300" />
           <Property Name="PageId" Type="int" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -148,6 +164,7 @@
         <Function Name="GetRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetTranslate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PageId" Type="int" Mode="In" />
+          <Parameter Name="TagId" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PageIndex" Type="int" Mode="In" />
@@ -168,6 +185,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Translates" EntityType="Self.Translates" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -192,9 +210,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AbcUEMDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AbcUEMDbEntities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="GetTranslate" ReturnType="Collection(AbcUEMDbModel.GetTranslate_Result)">
-          <Parameter Name="PageId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetRoles" ReturnType="Collection(AbcUEMDbModel.GetRoles_Result)" />
           <FunctionImport Name="GetUsers" ReturnType="Collection(AbcUEMDbModel.GetUsers_Result)">
             <Parameter Name="PageIndex" Mode="In" Type="Int32" />
@@ -215,7 +230,6 @@
           <EntitySet Name="AspNetUserRoles" EntityType="AbcUEMDbModel.AspNetUserRoles" />
           <EntitySet Name="AspNetUsers" EntityType="AbcUEMDbModel.AspNetUsers" />
           <EntitySet Name="Pages" EntityType="AbcUEMDbModel.Pages" />
-          <EntitySet Name="Translates" EntityType="AbcUEMDbModel.Translates" />
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="AbcUEMDbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -232,11 +246,13 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <FunctionImport Name="GetTranslate" ReturnType="Collection(AbcUEMDbModel.GetTranslate_Result)">
+            <Parameter Name="PageId" Mode="In" Type="Int32" />
+            <Parameter Name="TagId" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Translates" EntityType="AbcUEMDbModel.Translates" />
+          <EntitySet Name="Calendar" EntityType="AbcUEMDbModel.Calendar" />
         </EntityContainer>
-        <ComplexType Name="GetTranslate_Result">
-          <Property Type="String" Name="NameFr" Nullable="true" />
-          <Property Type="String" Name="NameMk" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="GetRoles_Result">
           <Property Type="String" Name="Id" Nullable="false" MaxLength="128" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="256" />
@@ -335,15 +351,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Page" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Translates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NameFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PageId" Type="Int32" />
-        </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Type="AbcUEMDbModel.AspNetRoles" Role="AspNetRoles" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -400,20 +407,47 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetTranslate_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="TitleMk" Nullable="true" />
+          <Property Type="String" Name="TitleFr" Nullable="true" />
+          <Property Type="String" Name="DescriptionMk" Nullable="true" />
+          <Property Type="String" Name="DescriptionFr" Nullable="true" />
+          <Property Type="String" Name="ImgPath" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TagId" Nullable="true" MaxLength="300" />
+          <Property Type="Int32" Name="PageId" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Translates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TitleMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TitleFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DescriptionMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DescriptionFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImgPath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="TagId" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="PageId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Calendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TitleMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TitleFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DescriptionMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DescriptionFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="start" Type="DateTime" Precision="3" />
+          <Property Name="end" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AbcUEMDbModelStoreContainer" CdmEntityContainer="AbcUEMDbEntities">
-          <FunctionImportMapping FunctionImportName="GetTranslate" FunctionName="AbcUEMDbModel.Store.GetTranslate">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AbcUEMDbModel.GetTranslate_Result">
-                <ScalarProperty Name="NameFr" ColumnName="NameFr" />
-                <ScalarProperty Name="NameMk" ColumnName="NameMk" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetRoles" FunctionName="AbcUEMDbModel.Store.GetRoles">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AbcUEMDbModel.GetRoles_Result">
@@ -517,12 +551,43 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetTranslate" FunctionName="AbcUEMDbModel.Store.GetTranslate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AbcUEMDbModel.GetTranslate_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+                <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+                <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+                <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+                <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Translates">
             <EntityTypeMapping TypeName="AbcUEMDbModel.Translates">
               <MappingFragment StoreEntitySet="Translates">
                 <ScalarProperty Name="PageId" ColumnName="PageId" />
-                <ScalarProperty Name="NameFr" ColumnName="NameFr" />
-                <ScalarProperty Name="NameMk" ColumnName="NameMk" />
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+                <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+                <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+                <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+                <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Calendar">
+            <EntityTypeMapping TypeName="AbcUEMDbModel.Calendar">
+              <MappingFragment StoreEntitySet="Calendar">
+                <ScalarProperty Name="end" ColumnName="end" />
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="DescriptionFr" ColumnName="DescriptionFr" />
+                <ScalarProperty Name="DescriptionMk" ColumnName="DescriptionMk" />
+                <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+                <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

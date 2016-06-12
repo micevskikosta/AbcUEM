@@ -47,23 +47,57 @@ namespace AbcUEM.Controllers
             return View();
         }
 
-        public ActionResult Translate(Enums.Pages page, Languages lang)
+        public ActionResult Translate(Enums.Pages page, Languages lang, string tagId)
         {
             using(AbcUEMDbEntities db = new AbcUEMDbEntities())
             {
                 if (lang == Languages.Mk)
                 {
-                    return Json(db.GetTranslate((int)page).ToList().Select(x=> new {
-                        Name = x.NameMk
+
+                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new {
+                        Title = x.TitleMk,
+                        Description = x.DescriptionMk,
+                        ImgPath = x.ImgPath
                     }), JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(db.GetTranslate((int)page).ToList().Select(x => new {
-                        Name = x.NameFr
+                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new {
+                        Title = x.TitleFr,
+                        Description = x.DescriptionFr,
+                        ImgPath = x.ImgPath
                     }), JsonRequestBehavior.AllowGet);
                 }
                 
+            }
+        }
+
+        public ActionResult CalendarEvents(Languages lang)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                if (lang == Languages.Mk)
+                {
+                    return Json(db.Calendar.Select(x => new {
+                        id = x.Id,
+                        title = x.TitleMk,
+                        descriptio = x.DescriptionMk,
+                        start = x.start,
+                        end = x.end
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(db.Calendar.Select(x => new {
+                        id = x.Id,
+                        title = x.TitleFr,
+                        descriptio = x.DescriptionFr,
+                        start = x.start,
+                        end = x.end
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+
+                }
+
             }
         }
     }

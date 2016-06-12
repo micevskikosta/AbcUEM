@@ -35,15 +35,7 @@ namespace AbcUEM.Models
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Pages> Pages { get; set; }
         public virtual DbSet<Translates> Translates { get; set; }
-    
-        public virtual ObjectResult<GetTranslate_Result> GetTranslate(Nullable<int> pageId)
-        {
-            var pageIdParameter = pageId.HasValue ?
-                new ObjectParameter("PageId", pageId) :
-                new ObjectParameter("PageId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTranslate_Result>("GetTranslate", pageIdParameter);
-        }
+        public virtual DbSet<Calendar> Calendar { get; set; }
     
         public virtual ObjectResult<GetRoles_Result> GetRoles()
         {
@@ -87,6 +79,19 @@ namespace AbcUEM.Models
                 new ObjectParameter("Active", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateActiveUser", idParameter, activeParameter);
+        }
+    
+        public virtual ObjectResult<GetTranslate_Result> GetTranslate(Nullable<int> pageId, string tagId)
+        {
+            var pageIdParameter = pageId.HasValue ?
+                new ObjectParameter("PageId", pageId) :
+                new ObjectParameter("PageId", typeof(int));
+    
+            var tagIdParameter = tagId != null ?
+                new ObjectParameter("TagId", tagId) :
+                new ObjectParameter("TagId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTranslate_Result>("GetTranslate", pageIdParameter, tagIdParameter);
         }
     }
 }

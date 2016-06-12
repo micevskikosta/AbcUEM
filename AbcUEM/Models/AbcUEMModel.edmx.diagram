@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="432471f291f04a21968638fe62791796" Name="Diagram1">
+      <Diagram DiagramId="432471f291f04a21968638fe62791796" Name="Diagram1" ZoomLevel="76">
         <EntityTypeShape EntityType="AbcUEMDbModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="1.625" />
         <EntityTypeShape EntityType="AbcUEMDbModel.AspNetRoles" Width="1.5" PointX="3.75" PointY="0.75" />
         <EntityTypeShape EntityType="AbcUEMDbModel.AspNetUserClaims" Width="1.5" PointX="3" PointY="8.625" />
@@ -12,11 +12,12 @@
         <EntityTypeShape EntityType="AbcUEMDbModel.AspNetUserRoles" Width="1.5" PointX="6" PointY="4.625" />
         <EntityTypeShape EntityType="AbcUEMDbModel.AspNetUsers" Width="1.5" PointX="0.75" PointY="3.25" />
         <EntityTypeShape EntityType="AbcUEMDbModel.Pages" Width="1.5" PointX="5.75" PointY="7.625" />
-        <EntityTypeShape EntityType="AbcUEMDbModel.Translates" Width="1.5" PointX="7.75" PointY="1.625" />
         <AssociationConnector Association="AbcUEMDbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
         <AssociationConnector Association="AbcUEMDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="AbcUEMDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="AbcUEMDbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" />
+        <EntityTypeShape EntityType="AbcUEMDbModel.Translates" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AbcUEMDbModel.Calendar" Width="1.5" PointX="8.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

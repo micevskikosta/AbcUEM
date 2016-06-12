@@ -3,5 +3,49 @@
     Layout = null;
 }
 <div ng-controller="ContactController as cc" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 center-block height-100">
-   <div class="inner-page">{{cc.contactPage}}</div>
+   <div class="inner-page">
+       @*{{cc.contactPage}}*@
+       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+           <form>
+               <div class="form-group">
+                   <label for="nameAndLastName">{{cc.nameAndLastName}}</label>
+                   <input type="input" class="form-control" id="nameAndLastName">
+               </div>
+               <div class="form-group">
+                   <label for="email">{{cc.email}}</label>
+                   <input type="email" class="form-control" id="email">
+               </div>
+               <div class="form-group">
+                   <label for="note">{{cc.note}}</label>
+                   <textarea class="form-control" id="note" style="height: 180px;"></textarea>
+               </div>
+               <button type="submit" class="btn btn-default" style="float:right">{{cc.send}}</button>
+           </form>
+       </div>
+       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="map" style="height:400px"></div>
+       </div>
+   </div>
+
+    <script src="http://maps.google.com/maps/api/js?callback=initMap" type="text/javascript"></script>
+    <script type="text/javascript">
+    var map;
+    function initMap() {
+        var myLatLng = { lat: 47.3974373, lng: 8.4627346 };
+
+        // Create a map object and specify the DOM element for display.
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            scrollwheel: false,
+            zoom: 7
+        });
+
+        // Create a marker and set its position.
+        var marker = new google.maps.Marker({
+            map: map,
+            position: myLatLng,
+            title: 'Hello World!'
+        });
+    }
+    </script>
 </div>
