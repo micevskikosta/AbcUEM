@@ -226,6 +226,12 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>AbcUEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GalleryDetails.cs">
+      <DependentUpon>AbcUEMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GalleryMaster.cs">
+      <DependentUpon>AbcUEMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetRoles_Result.cs">
       <DependentUpon>AbcUEMModel.tt</DependentUpon>
     </Compile>
@@ -286,8 +292,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\logo1.jpg" />
+    <Content Include="Images\Gallery\Details\1.jpg" />
+    <Content Include="Images\Gallery\Master\2.jpg" />
+    <Content Include="Images\Gallery\Master\1.jpg" />
     <Content Include="Images\logo.jpg" />
+    <Content Include="Images\logo1.jpg" />
     <Content Include="Images\schools\Cheminet.png" />
     <Content Include="Images\schools\Denges.jpg" />
     <Content Include="Images\schools\echallens.jpg" />

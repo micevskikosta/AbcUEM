@@ -23,7 +23,6 @@ var SiteScript;
                 $this.translate(this.$scope.mc.lang);
             }
             CalendarController.prototype.translate = function (lang) {
-                console.log("kuroi");
                 var result = this.loadEvents(lang);
                 $('#calendar-holder').empty().append('<div id="calendar"></div>');
                 if (lang == g.Languages.Mk) {
@@ -93,3 +92,4 @@ var SiteScript;
         angular.module("AbcUEM").controller("CalendarController", CalendarController);
     })(Galendar = SiteScript.Galendar || (SiteScript.Galendar = {}));
 })(SiteScript || (SiteScript = {}));
+//# sourceMappingURL=ng-app-calendar.js.map

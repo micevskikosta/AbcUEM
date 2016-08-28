@@ -18,6 +18,8 @@
         <AssociationConnector Association="AbcUEMDbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" />
         <EntityTypeShape EntityType="AbcUEMDbModel.Translates" Width="1.5" PointX="8.375" PointY="0.75" />
         <EntityTypeShape EntityType="AbcUEMDbModel.Calendar" Width="1.5" PointX="8.375" PointY="4.75" />
+        <EntityTypeShape EntityType="AbcUEMDbModel.GalleryDetails" Width="1.5" PointX="8.375" PointY="8.75" />
+        <EntityTypeShape EntityType="AbcUEMDbModel.GalleryMaster" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

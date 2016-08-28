@@ -43,6 +43,8 @@
     </FunctionImport>
     <EntitySet Name="Translates" EntityType="AbcUEMDbModel.Translates" />
     <EntitySet Name="Calendar" EntityType="AbcUEMDbModel.Calendar" />
+    <EntitySet Name="GalleryDetails" EntityType="AbcUEMDbModel.GalleryDetails" />
+    <EntitySet Name="GalleryMaster" EntityType="AbcUEMDbModel.GalleryMaster" />
   </EntityContainer>
   <ComplexType Name="GetRoles_Result">
     <Property Type="String" Name="Id" Nullable="false" MaxLength="128" />
@@ -232,5 +234,24 @@
     <Property Name="DescriptionFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="start" Type="DateTime" Precision="3" />
     <Property Name="end" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="GalleryDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GalleryMasterId" Type="Int32" />
+    <Property Name="TitleMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TitleFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SysDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="GalleryMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TitleMk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TitleFr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SysDate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

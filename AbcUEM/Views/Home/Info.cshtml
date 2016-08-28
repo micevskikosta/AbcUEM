@@ -3,28 +3,105 @@
     Layout = null;
 }
 <style>
+    #InfoBoardDetails {
+        padding-top: 20px;
+        overflow: auto;
+        height: calc(100% - -50px);
+    }
+
     .bs-callout {
-    padding: 20px;
-    margin: 20px 0;
-    border: 1px solid #eee;
-    border-left-width: 5px;
-    border-radius: 3px;
-}
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #eee;
+        border-left-width: 5px;
+        border-radius: 3px;
+    }
+
     .bs-callout-warning {
-    border-left-color: rgb(185, 12, 6);
-}
+        border-left-color: rgb(185, 12, 6);
+    }
 </style>
 <div ng-controller="InfoController as ic" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 center-block height-100">
     <div class="inner-page">
         @*{{ic.infoPage}}*@
-    <div id="InfoBoard" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-        <div class="bs-callout bs-callout-warning" id="callout-stacked-modals" ng-repeat="info in ic.InfoArray">
-            <h4>{{info.Title}}</h4>
-            <p>{{info.Description}}</p>
+        <div id="InfoBoard" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            @if (User.IsInRole("Administrator"))
+            {
+                <div>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#addLeftContent">Додади</button>
+                </div>
+            }
+            <div class="bs-callout bs-callout-warning position-relative" id="callout-stacked-modals" ng-repeat="info in ic.InfoArray">
+                @if (User.IsInRole("Administrator"))
+                {
+                    <div class="admin-option">
+                        <button class="btn btn-default" ng-click="ic.editLeftItem(info)">Промени</button>
+                        <button class="btn btn-default">Избриши</button>
+                    </div>
+                }
+                <h4>{{info.Title}}</h4>
+                <p>{{info.Description}}</p>
+            </div>
+        </div>
+        <div id="InfoBoardDetails" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            @if (User.IsInRole("Administrator"))
+            {
+                <div>
+                    <button class="btn btn-default">Додади</button>
+                </div>
+            }
+            <div class="list-group position-relative" ng-repeat="info in ic.InfoBoardArray">
+                @if (User.IsInRole("Administrator"))
+                {
+                    <div class="admin-option">
+                        <button class="btn btn-default">Промени</button>
+                        <button class="btn btn-default">Избриши</button>
+                    </div>
+                }
+                <a class="list-group-item">
+                    <h4 class="list-group-item-heading">{{info.Title}}</h4>
+                    <p class="list-group-item-text">
+                        {{info.Description}}
+                    </p>
+                </a>
+            </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-        novosti
+
+    <!-- Modal -->
+    <div class="modal fade" id="addLeftContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Додади елемент (лево)</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                            <input ng-model="ic.content.TitleMk" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Содржина Мк:</label>
+                            <textarea ng-model="ic.content.DescriptionMk" class="form-control" id="message-text"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                            <input ng-model="ic.content.TitleFr" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Содржина Fr:</label>
+                            <textarea ng-model="ic.content.DescriptionFr" class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ic.clearForm()">Откажи</button>
+                    <button type="button" class="btn btn-primary" ng-click="ic.saveLeftItem(ic.content)">Зачувај</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
 </div>

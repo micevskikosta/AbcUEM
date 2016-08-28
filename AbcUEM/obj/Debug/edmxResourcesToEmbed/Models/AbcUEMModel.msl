@@ -145,5 +145,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="GalleryDetails">
+      <EntityTypeMapping TypeName="AbcUEMDbModel.GalleryDetails">
+        <MappingFragment StoreEntitySet="GalleryDetails">
+          <ScalarProperty Name="SysDate" ColumnName="SysDate" />
+          <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+          <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+          <ScalarProperty Name="GalleryMasterId" ColumnName="GalleryMasterId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GalleryMaster">
+      <EntityTypeMapping TypeName="AbcUEMDbModel.GalleryMaster">
+        <MappingFragment StoreEntitySet="GalleryMaster">
+          <ScalarProperty Name="SysDate" ColumnName="SysDate" />
+          <ScalarProperty Name="TitleFr" ColumnName="TitleFr" />
+          <ScalarProperty Name="TitleMk" ColumnName="TitleMk" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

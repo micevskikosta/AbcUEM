@@ -34,3 +34,4 @@ var SiteScript;
         angular.module("AbcUEM").controller("AboutController", AboutController);
     })(About = SiteScript.About || (SiteScript.About = {}));
 })(SiteScript || (SiteScript = {}));
+//# sourceMappingURL=ng-app-about.js.map

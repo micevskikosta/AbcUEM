@@ -19,7 +19,6 @@ namespace SiteScript.Galendar {
         }
 
         public translate(lang: g.Languages): void {
-            console.log("kuroi");
             var result = this.loadEvents(lang);
             $('#calendar-holder').empty().append('<div id="calendar"></div>')
             if (lang == g.Languages.Mk) {

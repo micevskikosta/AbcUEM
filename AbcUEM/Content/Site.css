@@ -1,19 +1,40 @@
-﻿html, body{
-    height:100%;
+﻿html, body {
+    height: 100%;
 }
 
-body{
-    background-color:#f1f1f1 !important;
+body {
+    background-color: #f1f1f1 !important;
 }
 
-.height-100{
-    height:100%;
+.height-100 {
+    height: 100%;
 }
 
-.views {
-    /*height: calc(100% - 137px);*/
-    padding-top: 20px;
-    padding-bottom: 20px;
+.position-relative {
+    position: relative;
+}
+
+.admin-option {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index:1000;
+}
+
+
+@media (min-width: 0) and (max-width: 991px) {
+    .views {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
+
+@media (min-width: 992px) {
+    .views {
+        /*height: calc(100% - 137px);*/
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 }
 
 .inner-page {
@@ -34,46 +55,46 @@ body{
     height: 26px;
 }
 
-.center-block{
-    float:none !important;
+.center-block {
+    float: none !important;
 }
 
-.text-aligh-right{
-        text-align: right;
+.text-aligh-right {
+    text-align: right;
 }
 
-.text-aligh-right a{
-    text-decoration: none;
-    color: white;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 26px;
-    cursor:pointer;
-}
-
-    .text-aligh-right a:hover {
-        color:#ccc;
+    .text-aligh-right a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 26px;
+        cursor: pointer;
     }
 
-.no-padding{
-    padding : 0 !important;
+        .text-aligh-right a:hover {
+            color: #ccc;
+        }
+
+.no-padding {
+    padding: 0 !important;
 }
 
-.float-left{
-    float:left;
+.float-left {
+    float: left;
 }
 
-.menu-bar{
-    margin-top:15px;
-    min-height:95px;
-    background:white;
+.menu-bar {
+    margin-top: 15px;
+    min-height: 95px;
+    background: white;
 }
 
-.menu-bar img{
-    width:90px;
-}
+    .menu-bar img {
+        width: 90px;
+    }
 
-.nav-bar-buttons{
+.nav-bar-buttons {
     margin-top: 45px;
 }
 
@@ -88,29 +109,30 @@ body{
         font-size: 18px;
     }
 
-    .nav-bar-buttons a:hover{
-            border-bottom: 2px solid rgb(185, 12, 6);
-            background:#dcdcdc;
-    }
-
-    .nav-bar-buttons .active{
+        .nav-bar-buttons a:hover {
             border-bottom: 2px solid rgb(185, 12, 6);
             background: #dcdcdc;
+        }
+
+    .nav-bar-buttons .active {
+        border-bottom: 2px solid rgb(185, 12, 6);
+        background: #dcdcdc;
     }
 
-    .top-nav-container form{
-        float:right !important;
-    }
-    .top-nav-container form a{
-         margin-left: 5px;
-    }
-   
+.top-nav-container form {
+    float: right !important;
+}
 
-    .padding-20{
-        padding:20px;
+    .top-nav-container form a {
+        margin-left: 5px;
     }
 
- /* Small devices (tablets, 768px and up) */
+
+.padding-20 {
+    padding: 20px;
+}
+
+/* Small devices (tablets, 768px and up) */
 @media (max-width: 1200px) {
     .nav-bar-buttons a {
         font-size: 15px !important;

@@ -36,6 +36,8 @@ namespace AbcUEM.Models
         public virtual DbSet<Pages> Pages { get; set; }
         public virtual DbSet<Translates> Translates { get; set; }
         public virtual DbSet<Calendar> Calendar { get; set; }
+        public virtual DbSet<GalleryDetails> GalleryDetails { get; set; }
+        public virtual DbSet<GalleryMaster> GalleryMaster { get; set; }
     
         public virtual ObjectResult<GetRoles_Result> GetRoles()
         {

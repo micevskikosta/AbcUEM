@@ -80,6 +80,25 @@
     <Property Name="start" Type="datetime" />
     <Property Name="end" Type="datetime" />
   </EntityType>
+  <EntityType Name="GalleryDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GalleryMasterId" Type="int" />
+    <Property Name="TitleMk" Type="nvarchar(max)" />
+    <Property Name="TitleFr" Type="nvarchar(max)" />
+    <Property Name="SysDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="GalleryMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleMk" Type="nvarchar(max)" />
+    <Property Name="TitleFr" Type="nvarchar(max)" />
+    <Property Name="SysDate" Type="datetime" />
+  </EntityType>
   <EntityType Name="Pages">
     <Key>
       <PropertyRef Name="Id" />
@@ -181,6 +200,8 @@
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GalleryDetails" EntityType="Self.GalleryDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GalleryMaster" EntityType="Self.GalleryMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Translates" EntityType="Self.Translates" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">

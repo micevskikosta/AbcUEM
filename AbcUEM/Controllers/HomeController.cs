@@ -11,7 +11,7 @@ namespace AbcUEM.Controllers
 
     public class HomeController : Controller
     {
-        
+
         public ActionResult Index()
         {
             return View();
@@ -49,12 +49,14 @@ namespace AbcUEM.Controllers
 
         public ActionResult Translate(Enums.Pages page, Languages lang, string tagId)
         {
-            using(AbcUEMDbEntities db = new AbcUEMDbEntities())
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
             {
                 if (lang == Languages.Mk)
                 {
 
-                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new {
+                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new
+                    {
+                        Id = x.Id,
                         Title = x.TitleMk,
                         Description = x.DescriptionMk,
                         ImgPath = x.ImgPath
@@ -62,13 +64,15 @@ namespace AbcUEM.Controllers
                 }
                 else
                 {
-                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new {
+                    return Json(db.GetTranslate((int)page, tagId).ToList().Select(x => new
+                    {
+                        Id = x.Id,
                         Title = x.TitleFr,
                         Description = x.DescriptionFr,
                         ImgPath = x.ImgPath
                     }), JsonRequestBehavior.AllowGet);
                 }
-                
+
             }
         }
 
@@ -78,7 +82,8 @@ namespace AbcUEM.Controllers
             {
                 if (lang == Languages.Mk)
                 {
-                    return Json(db.Calendar.Select(x => new {
+                    return Json(db.Calendar.Select(x => new
+                    {
                         id = x.Id,
                         title = x.TitleMk,
                         descriptio = x.DescriptionMk,
@@ -88,7 +93,8 @@ namespace AbcUEM.Controllers
                 }
                 else
                 {
-                    return Json(db.Calendar.Select(x => new {
+                    return Json(db.Calendar.Select(x => new
+                    {
                         id = x.Id,
                         title = x.TitleFr,
                         descriptio = x.DescriptionFr,
@@ -100,5 +106,103 @@ namespace AbcUEM.Controllers
 
             }
         }
+
+        public ActionResult GalleryMaster(Languages lang)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                if (lang == Languages.Mk)
+                {
+                    return Json(db.GalleryMaster.Select(x => new
+                    {
+                        id = x.Id,
+                        title = x.TitleMk,
+                        uploaded = x.SysDate
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(db.GalleryMaster.Select(x => new
+                    {
+                        id = x.Id,
+                        title = x.TitleFr,
+                        uploaded = x.SysDate
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+
+                }
+            }
+        }
+
+        public ActionResult GalleryDetails(int masterId, Languages lang)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                if (lang == Languages.Mk)
+                {
+                    return Json(db.GalleryDetails.Where(x => x.GalleryMasterId == masterId).Select(x => new
+                    {
+                        id = x.Id,
+                        title = x.TitleMk,
+                        uploaded = x.SysDate
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(db.GalleryDetails.Where(x => x.GalleryMasterId == masterId).Select(x => new
+                    {
+                        id = x.Id,
+                        title = x.TitleFr,
+                        uploaded = x.SysDate
+                    }).ToList(), JsonRequestBehavior.AllowGet);
+
+                }
+            }
+        }
+
+        public ActionResult AddContent(Translates item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    db.Translates.Add(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateContent(Translates item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    var obj = db.Translates.Find(item.Id);
+                    db.Entry(obj).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetContent(Translates item)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                return Json(db.Translates.Where(x => x.Id == item.Id).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }
