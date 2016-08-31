@@ -62,4 +62,3 @@ var SiteScript;
         angular.module("AbcUEM").controller("GaleryController", GaleryController);
     })(Galery = SiteScript.Galery || (SiteScript.Galery = {}));
 })(SiteScript || (SiteScript = {}));
-//# sourceMappingURL=ng-app-galery.js.map

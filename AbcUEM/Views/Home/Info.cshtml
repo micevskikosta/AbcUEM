@@ -28,15 +28,15 @@
             @if (User.IsInRole("Administrator"))
             {
                 <div>
-                    <button class="btn btn-default" data-toggle="modal" data-target="#addLeftContent">Додади</button>
+                    <button class="btn btn-default" ng-click="ic.editItem(info, 'InfoBoard')">Додади</button>
                 </div>
             }
             <div class="bs-callout bs-callout-warning position-relative" id="callout-stacked-modals" ng-repeat="info in ic.InfoArray">
                 @if (User.IsInRole("Administrator"))
                 {
                     <div class="admin-option">
-                        <button class="btn btn-default" ng-click="ic.editLeftItem(info)">Промени</button>
-                        <button class="btn btn-default">Избриши</button>
+                        <button class="btn btn-default" ng-click="ic.editItem(info, 'InfoBoard')">Промени</button>
+                        <button class="btn btn-default" data-toggle="modal" ng-click="ic.deleteItem(info, 'deleteItem', 'InfoBoard')">Избриши</button>
                     </div>
                 }
                 <h4>{{info.Title}}</h4>
@@ -47,15 +47,15 @@
             @if (User.IsInRole("Administrator"))
             {
                 <div>
-                    <button class="btn btn-default">Додади</button>
+                    <button class="btn btn-default" ng-click="ic.addContent('InfoBoardDetails')">Додади</button>
                 </div>
             }
             <div class="list-group position-relative" ng-repeat="info in ic.InfoBoardArray">
                 @if (User.IsInRole("Administrator"))
                 {
                     <div class="admin-option">
-                        <button class="btn btn-default">Промени</button>
-                        <button class="btn btn-default">Избриши</button>
+                        <button class="btn btn-default" ng-click="ic.editItem(info, 'InfoBoardDetails')">Промени</button>
+                        <button class="btn btn-default" ng-click="ic.deleteItem(info, 'deleteItem', 'InfoBoardDetails')">Избриши</button>
                     </div>
                 }
                 <a class="list-group-item">
@@ -69,12 +69,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addLeftContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="addContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Додади елемент (лево)</h4>
+                    <h4 class="modal-title" id="myModalLabel">Додади елемент</h4>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -98,7 +98,26 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ic.clearForm()">Откажи</button>
-                    <button type="button" class="btn btn-primary" ng-click="ic.saveLeftItem(ic.content)">Зачувај</button>
+                    <button type="button" class="btn btn-primary" ng-click="ic.saveItem(ic.content)">Зачувај</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Избриши елемент</h4>
+                </div>
+                <div class="modal-body">
+                  Избриши <b>{{ic.item}}</b> ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ic.dismiss()">Откажи</button>
+                    <button type="button" class="btn btn-primary" ng-click="ic.confirm()">Избриши</button>
                 </div>
             </div>
         </div>

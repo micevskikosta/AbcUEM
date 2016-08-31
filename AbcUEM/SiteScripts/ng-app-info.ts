@@ -42,29 +42,47 @@ namespace SiteScript.Info {
             });
         }
 
-        private editLeftItem(item: Content) {
+        private editItem(item: Content, section) {
+            this.section = section;
             this.$http.get("/Home/GetContent?Id=" + item.Id).then((response: any) => {
                 this.content = response.data;
-                $("#addLeftContent").modal("show");
+                $("#addContent").modal("show");
             });
         }
+        
+        private addContent(section) {
+            this.section = section;
+            $("#addContent").modal("show");
+        }
 
-        private saveLeftItem(item: Content) {
+        private saveItem(item: Content) {
             if (item.Id) {
                 this.$http.post("/Home/UpdateContent", { item: item }).then((response: any) => {
                     if (response.data) {
-                        this.translate(g.Pages.Info, this.$scope.mc.lang, "InfoBoard");
-                        $("#addLeftContent").modal("hide");
+                        if (this.section == "InfoBoardDetails") {
+                            this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);
+                        }
+                        else {
+                            this.translate(g.Pages.Info, this.$scope.mc.lang, this.section);
+                        }
+                        $("#addContent").modal("hide");
+                        this.clearForm();
                     }
                 });
             }
             else {
                 item.PageId = 4;
-                item.TagId = "InfoBoard";
+                item.TagId = this.section;
                 this.$http.post("/Home/AddContent", { item: item }).then((response: any) => {
                     if (response.data) {
-                        this.translate(g.Pages.Info, this.$scope.mc.lang, "InfoBoard");
-                        $("#addLeftContent").modal("hide");
+                        if (this.section == "InfoBoardDetails") {
+                            this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);
+                        }
+                        else {
+                            this.translate(g.Pages.Info, this.$scope.mc.lang, this.section);
+                        }
+                        $("#addContent").modal("hide");
+                        this.clearForm();
                     }
                 });
             }
@@ -72,6 +90,41 @@ namespace SiteScript.Info {
 
         private clearForm() {
             this.content = null;
+            this.section = null;
+        }
+
+        private id: any;
+        private item: string;
+        private element: string;
+        private section: string;
+        private deleteItem(item: any, element: any, section: any) {
+            $('#' + element).modal('show');
+            this.id = item.Id;
+            this.item = item.Title + ' (' + item.Description + ')';
+            this.element = element;
+            this.section = section;
+        }
+
+        private confirm() {
+            this.$http.post("/Home/DeleteContent", { Id: this.id }).then((response: any) => {
+                if (response.data) {
+                    if (this.section == "InfoBoardDetails") {
+                        this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);
+                    }
+                    else {
+                        this.translate(g.Pages.Info, this.$scope.mc.lang, this.section);
+                    }
+                    $('#' + this.element).modal('hide');
+                    this.dismiss();
+                }
+            });
+        }
+
+        private dismiss() {
+            this.id = null;
+            this.item = null;
+            this.element = null;
+            this.section = null;
         }
     }
 

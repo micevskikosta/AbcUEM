@@ -52,4 +52,3 @@ var SiteScript;
         angular.module("AbcUEM").controller("ContactController", ContactController);
     })(Contact = SiteScript.Contact || (SiteScript.Contact = {}));
 })(SiteScript || (SiteScript = {}));
-//# sourceMappingURL=ng-app-contact.js.map

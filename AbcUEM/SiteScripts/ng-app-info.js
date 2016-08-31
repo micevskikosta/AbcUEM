@@ -42,40 +42,85 @@ var SiteScript;
                     _this.InfoBoardArray = response.data;
                 });
             };
-            InfoController.prototype.editLeftItem = function (item) {
+            InfoController.prototype.editItem = function (item, section) {
                 var _this = this;
+                this.section = section;
                 this.$http.get("/Home/GetContent?Id=" + item.Id).then(function (response) {
                     _this.content = response.data;
-                    $("#addLeftContent").modal("show");
+                    $("#addContent").modal("show");
                 });
             };
-            InfoController.prototype.saveLeftItem = function (item) {
+            InfoController.prototype.addContent = function (section) {
+                this.section = section;
+                $("#addContent").modal("show");
+            };
+            InfoController.prototype.saveItem = function (item) {
                 var _this = this;
                 if (item.Id) {
                     this.$http.post("/Home/UpdateContent", { item: item }).then(function (response) {
                         if (response.data) {
-                            _this.translate(g.Pages.Info, _this.$scope.mc.lang, "InfoBoard");
-                            $("#addLeftContent").modal("hide");
+                            if (_this.section == "InfoBoardDetails") {
+                                _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                            }
+                            else {
+                                _this.translate(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                            }
+                            $("#addContent").modal("hide");
+                            _this.clearForm();
                         }
                     });
                 }
                 else {
                     item.PageId = 4;
-                    item.TagId = "InfoBoard";
+                    item.TagId = this.section;
                     this.$http.post("/Home/AddContent", { item: item }).then(function (response) {
                         if (response.data) {
-                            _this.translate(g.Pages.Info, _this.$scope.mc.lang, "InfoBoard");
-                            $("#addLeftContent").modal("hide");
+                            if (_this.section == "InfoBoardDetails") {
+                                _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                            }
+                            else {
+                                _this.translate(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                            }
+                            $("#addContent").modal("hide");
+                            _this.clearForm();
                         }
                     });
                 }
             };
             InfoController.prototype.clearForm = function () {
                 this.content = null;
+                this.section = null;
+            };
+            InfoController.prototype.deleteItem = function (item, element, section) {
+                $('#' + element).modal('show');
+                this.id = item.Id;
+                this.item = item.Title + ' (' + item.Description + ')';
+                this.element = element;
+                this.section = section;
+            };
+            InfoController.prototype.confirm = function () {
+                var _this = this;
+                this.$http.post("/Home/DeleteContent", { Id: this.id }).then(function (response) {
+                    if (response.data) {
+                        if (_this.section == "InfoBoardDetails") {
+                            _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                        }
+                        else {
+                            _this.translate(g.Pages.Info, _this.$scope.mc.lang, _this.section);
+                        }
+                        $('#' + _this.element).modal('hide');
+                        _this.dismiss();
+                    }
+                });
+            };
+            InfoController.prototype.dismiss = function () {
+                this.id = null;
+                this.item = null;
+                this.element = null;
+                this.section = null;
             };
             return InfoController;
         })(g.Global);
         angular.module("AbcUEM").controller("InfoController", InfoController);
     })(Info = SiteScript.Info || (SiteScript.Info = {}));
 })(SiteScript || (SiteScript = {}));
-//# sourceMappingURL=ng-app-info.js.map

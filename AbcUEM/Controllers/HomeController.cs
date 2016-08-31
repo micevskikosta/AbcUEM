@@ -204,5 +204,61 @@ namespace AbcUEM.Controllers
             }
         }
 
+        public ActionResult DeleteContent(Translates item)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                bool res = true;
+                try
+                {
+                    db.Translates.Remove(db.Translates.Find(item.Id));
+                    db.SaveChanges();
+                }
+                catch
+                {
+                    res = false;
+                }
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult SaveCalendarEvent(Calendar item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    db.Calendar.Add(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCalendarEvent(Calendar item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    var obj = db.Calendar.Find(item.Id);
+                    obj.start = item.start;
+                    obj.end = item.end;
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -43,4 +43,3 @@ var SiteScript;
         angular.module("AbcUEM").controller("SchoolController", SchoolController);
     })(Schools = SiteScript.Schools || (SiteScript.Schools = {}));
 })(SiteScript || (SiteScript = {}));
-//# sourceMappingURL=ng-app-school.js.map
