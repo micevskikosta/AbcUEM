@@ -14,7 +14,7 @@ namespace SiteScripts.Global {
         }
 
         public getTranslateAsync(page: number, lang: number, tagId: string): angular.IPromise<any> {
-            return this.$http.get("/Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
+            return this.$http.get(rootUrl + "Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
         }
     }
 }

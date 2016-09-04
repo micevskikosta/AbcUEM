@@ -17,21 +17,29 @@ namespace SiteScript.Galendar {
 
     declare var startDate;
     declare var endDate;
+    declare var $customScope;
+    declare var result;
+
+    
 
     class CalendarController extends g.Global {
         private content: Content = new Content();
-        constructor(public $scope, public $http: ng.IHttpService) {
+        private currentLang: any;
+        constructor(public $scope, public $http: ng.IHttpService, public RootFactory: any) {
             super();
-
+            $customScope = this;
             var $this = this;
             this.$scope.$on('language', function (event, lang) {
                 $this.translate(lang);
             });
             $this.translate(this.$scope.mc.lang);
+
+            this.initJquery();
         }
 
         public translate(lang: g.Languages): void {
-            var result = this.loadEvents(lang);
+            this.currentLang = lang;
+            result = this.loadEvents(lang);
             $('#calendar-holder').empty().append('<div id="calendar"></div>')
             if (lang == g.Languages.Mk) {
                 $("#calendar").fullCalendar({
@@ -65,12 +73,18 @@ namespace SiteScript.Galendar {
                             events.push({
                                 _id: result[i].id,
                                 title: result[i].title,
+                                description: result[i].description,
                                 start: result[i].start,
                                 end: result[i].end,
                                 allDay: false
                             });
                         }
                         callback(events);
+                    },
+                    eventRender: function (event, element) {
+                        if (event.description != '') {
+                            element.find('.fc-title').append('<div class="glyphicon glyphicon-info-sign" style="position: absolute;top: 2px;right:2px;"></div>');
+                        }
                     },
                     select: function (start, end) {
                         startDate = start._d;
@@ -79,7 +93,12 @@ namespace SiteScript.Galendar {
                     },
                     eventClick: function (calEvent, jsEvent, view) {
                         if (jsEvent.type == 'click') {
-                            $("#content").modal("show");
+                            $customScope.$http.post($customScope.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then((response: any) => {
+                                if (response.data) {
+                                    $customScope.content = response.data;
+                                    $("#content").modal("show");
+                                }
+                            });
                         }
                     },
                     eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
@@ -87,7 +106,7 @@ namespace SiteScript.Galendar {
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             type: 'POST',
-                            url: '/Home/UpdateCalendarEvent',
+                            url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
                             data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
                             cache: false,
                             success: function (data) {
@@ -103,7 +122,7 @@ namespace SiteScript.Galendar {
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             type: 'POST',
-                            url: '/Home/UpdateCalendarEvent',
+                            url: $customScope.RootFactory.RootUrl() +'Home/UpdateCalendarEvent',
                             data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
                             cache: false,
                             success: function (data) {
@@ -113,12 +132,6 @@ namespace SiteScript.Galendar {
                                 
                             }
                         });
-                        
-                        //CalendarService.UpdateEventDate(event._id, moment(event.start).format("YYYY-MM-DD HH:mm"), moment(event.end).format("YYYY-MM-DD HH:mm")).then(function (data) {
-                        //    if (data[0] == false) {
-                        //        revertFunc();
-                        //    }
-                        //});
                     }
                 });
             }
@@ -144,9 +157,9 @@ namespace SiteScript.Galendar {
                     defaultEventMinutes: 60,
                     buttonText: {
                         today: "aujourd'hui",
-                        month: 'месец',
-                        week: 'недела',
-                        day: 'ден'
+                        month: 'mois',
+                        week: 'dimanche',
+                        day: 'jour'
                     },
                     events: function (start, end, timezone, callback) {
                         var events = [];
@@ -154,12 +167,65 @@ namespace SiteScript.Galendar {
                             events.push({
                                 _id: result[i].id,
                                 title: result[i].title,
+                                description: result[i].description,
                                 start: result[i].start,
-                                end: result[i].end,// will be parsed,
+                                end: result[i].end,
                                 allDay: false
                             });
                         }
                         callback(events);
+                    },
+                    eventRender: function (event, element) {
+                        if (event.description != '') {
+                            element.find('.fc-title').append('<div class="glyphicon glyphicon-info-sign" style="position: absolute;top: 2px;right:2px;"></div>');
+                        }
+                    },
+                    select: function (start, end) {
+                        startDate = start._d;
+                        endDate = end._d;
+                        $("#content").modal("show");
+                    },
+                    eventClick: function (calEvent, jsEvent, view) {
+                        if (jsEvent.type == 'click') {
+                            $customScope.$http.post(this.RootFactory.RootUrl() +"Home/GetCalendarEvent", { id: calEvent._id }).then((response: any) => {
+                                if (response.data) {
+                                    $customScope.content = response.data;
+                                    $("#content").modal("show");
+                                }
+                            });
+                        }
+                    },
+                    eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            type: 'POST',
+                            url: $customScope.RootFactory.RootUrl() +'Home/UpdateCalendarEvent',
+                            data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
+                            cache: false,
+                            success: function (data) {
+                                revertFunc();
+                            },
+                            failure: function (response) {
+
+                            }
+                        });
+                    },
+                    eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            type: 'POST',
+                            url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
+                            data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
+                            cache: false,
+                            success: function (data) {
+                                revertFunc();
+                            },
+                            failure: function (response) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -168,7 +234,7 @@ namespace SiteScript.Galendar {
         loadEvents(lang: g.Languages): any {
             var response: any;
             $.ajax({
-                url: "/Home/CalendarEvents",
+                url: this.RootFactory.RootUrl() +"Home/CalendarEvents",
                 method: 'GET',
                 data: { lang: lang },
                 async: false,
@@ -180,20 +246,52 @@ namespace SiteScript.Galendar {
         }
         
         private saveItem(item: Content) {
-            item.start = startDate;
-            item.end = endDate;
-            this.$http.post("/Home/SaveCalendarEvent", { item: item }).then((response: any) => {
-                if (response.data) {
-                    window.location.reload();
-                    this.clearForm();
-                }
-            });
+            if (item.Id) {
+                this.$http.post(this.RootFactory.RootUrl() + "Home/UpdateCalendarEvent", { item: item }).then((response: any) => {
+                    if (response.data) {
+                        result = this.loadEvents(this.$scope.mc.lang);
+                        $('#calendar').fullCalendar('refetchEvents');
+                        $("#content").modal("hide");
+                    }
+                });
+            }
+            else {
+                item.start = startDate;
+                item.end = endDate;
+                this.$http.post(this.RootFactory.RootUrl() + "Home/SaveCalendarEvent", { item: item }).then((response: any) => {
+                    if (response.data) {
+                        result = this.loadEvents(this.$scope.mc.lang);
+                        $('#calendar').fullCalendar('refetchEvents');
+                        $("#content").modal("hide");
+                    }
+                });
+            }
         }
 
         private clearForm() {
             this.content = null;
             startDate = null;
             endDate = null;
+        }
+
+        private deleteEvent(item: Content) {
+            var c = confirm("Дали сте сигурни за бришење на елементот");
+            if (c) {
+                this.$http.post(this.RootFactory.RootUrl() +"Home/DeleteCalendarEvent", { item: item }).then((response: any) => {
+                    if (response.data) {
+                        result = this.loadEvents(this.$scope.mc.lang);
+                        $('#calendar').fullCalendar('refetchEvents');
+                        $("#content").modal("hide");
+                    }
+                });
+            }
+        }
+
+        private initJquery() {
+            $("#content").on("hidden.bs.modal", function () {
+                $(this).find('form')[0].reset();
+                $customScope.$scope.cc.content = null;
+            });
         }
     }
 

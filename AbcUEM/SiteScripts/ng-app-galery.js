@@ -11,10 +11,11 @@ var SiteScript;
         var g = SiteScripts.Global;
         var GaleryController = (function (_super) {
             __extends(GaleryController, _super);
-            function GaleryController($scope, $http) {
+            function GaleryController($scope, $http, RootFactory) {
                 _super.call(this);
                 this.$scope = $scope;
                 this.$http = $http;
+                this.RootFactory = RootFactory;
                 this.rootGalery = true;
                 this.galleryHomeNav = { nameMk: "Галерија", nameFr: "Gallery" };
                 var $this = this;
@@ -36,10 +37,10 @@ var SiteScript;
                 }
             };
             GaleryController.prototype.getTranslateGalleryAsync = function (lang) {
-                return this.$http.get("/Home/GalleryMaster?lang=" + lang);
+                return this.$http.get(this.RootFactory.RootUrl() + "Home/GalleryMaster?lang=" + lang);
             };
             GaleryController.prototype.getTranslateGalleryDetailsAsync = function (masterId, lang) {
-                return this.$http.get("/Home/GalleryDetails?masterId=" + masterId + "&lang=" + lang);
+                return this.$http.get(this.RootFactory.RootUrl() + "Home/GalleryDetails?masterId=" + masterId + "&lang=" + lang);
             };
             GaleryController.prototype.viewImage = function (img) {
                 var _this = this;

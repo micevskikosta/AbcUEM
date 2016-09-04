@@ -17,31 +17,66 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Додади елемент</h4>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <h4 class="modal-title" id="myModalLabel">Додади/промени елемент</h4>
+                    }
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Наслов Мк:</label>
-                            <input ng-model="cc.content.TitleMk" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="control-label">Содржина Мк:</label>
-                            <textarea ng-model="cc.content.DescriptionMk" class="form-control" id="message-text"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Наслов Fr:</label>
-                            <input ng-model="cc.content.TitleFr" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="control-label">Содржина Fr:</label>
-                            <textarea ng-model="cc.content.DescriptionFr" class="form-control" id="message-text"></textarea>
-                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <input hidden style="display:none" ng-model="cc.content.Id">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                                <input ng-model="cc.content.TitleMk" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Содржина Мк:</label>
+                                <textarea ng-model="cc.content.DescriptionMk" class="form-control" id="message-text"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                                <input ng-model="cc.content.TitleFr" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Содржина Fr:</label>
+                                <textarea ng-model="cc.content.DescriptionFr" class="form-control" id="message-text"></textarea>
+                            </div>
+                        }
+                        else
+                        {
+                            <input hidden style="display:none" ng-model="cc.content.Id">
+                            <div ng-show="cc.currentLang == 0">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Наслов:</label>
+                                    <input ng-model="cc.content.TitleMk" class="form-control" id="recipient-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="control-label">Опис:</label>
+                                    <textarea style="min-height:150px" ng-model="cc.content.DescriptionMk" class="form-control" id="message-text"></textarea>
+                                </div>
+                            </div>
+                            <div ng-show="cc.currentLang == 1">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Titre:</label>
+                                    <input ng-model="cc.content.TitleFr" class="form-control" id="recipient-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="control-label">Inventaire:</label>
+                                    <textarea style="min-height:150px" ng-model="cc.content.DescriptionFr" class="form-control" id="message-text"></textarea>
+                                </div>
+                            </div>
+                        }
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cc.clearForm()">Откажи</button>
-                    <button type="button" class="btn btn-primary" ng-click="cc.saveItem(cc.content)">Зачувај</button>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cc.deleteEvent(cc.content)">Избриши</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cc.clearForm()">Откажи</button>
+                        <button type="button" class="btn btn-primary" ng-click="cc.saveItem(cc.content)">Зачувај</button>
+                    }
                 </div>
             </div>
         </div>

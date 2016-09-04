@@ -48,10 +48,11 @@ var SiteScripts;
         //});
         var MasterController = (function (_super) {
             __extends(MasterController, _super);
-            function MasterController($http, $rootScope) {
+            function MasterController($http, $rootScope, RootFactory) {
                 _super.call(this);
                 this.$http = $http;
                 this.$rootScope = $rootScope;
+                this.RootFactory = RootFactory;
                 this.setLang(g.Languages.Mk);
                 this.getTranslate(g.Pages.Master, this.lang);
             }
@@ -61,7 +62,7 @@ var SiteScripts;
             };
             MasterController.prototype.getTranslate = function (page, lang) {
                 var _this = this;
-                this.$http.get("/Home/Translate?page=" + page + "&lang=" + lang).then(function (response) {
+                this.$http.get(this.RootFactory.RootUrl() + "Home/Translate?page=" + page + "&lang=" + lang).then(function (response) {
                     _this.masterLang = response.data;
                 });
             };

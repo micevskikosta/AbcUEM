@@ -23,7 +23,7 @@ var SiteScripts;
                 this.$rootScope.$broadcast('language', this.lang);
             };
             Global.prototype.getTranslateAsync = function (page, lang, tagId) {
-                return this.$http.get("/Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
+                return this.$http.get(rootUrl + "Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
             };
             return Global;
         })();

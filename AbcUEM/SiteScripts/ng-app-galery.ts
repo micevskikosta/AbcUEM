@@ -14,7 +14,7 @@ namespace SiteScript.Galery {
         private galleryHomeNav: any = { nameMk: "Галерија", nameFr: "Gallery" };
         private largeImgSrc: string;
         private largeImgDesc: string;
-        constructor(public $scope, public $http: ng.IHttpService) {
+        constructor(public $scope, public $http: ng.IHttpService, public RootFactory: any) {
             super();
             var $this = this;
             this.$scope.$on('language', function (event, lang) {
@@ -37,11 +37,11 @@ namespace SiteScript.Galery {
         }
 
         public getTranslateGalleryAsync(lang: g.Languages): angular.IPromise<any> {
-            return this.$http.get("/Home/GalleryMaster?lang=" + lang);
+            return this.$http.get(this.RootFactory.RootUrl() + "Home/GalleryMaster?lang=" + lang);
         }
 
         public getTranslateGalleryDetailsAsync(masterId: number, lang: g.Languages): angular.IPromise<any> {
-            return this.$http.get("/Home/GalleryDetails?masterId=" + masterId +"&lang=" + lang);
+            return this.$http.get(this.RootFactory.RootUrl() + "Home/GalleryDetails?masterId=" + masterId +"&lang=" + lang);
         }
 
 

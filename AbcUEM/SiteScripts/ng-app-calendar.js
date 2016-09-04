@@ -16,19 +16,23 @@ var SiteScript;
         })();
         var CalendarController = (function (_super) {
             __extends(CalendarController, _super);
-            function CalendarController($scope, $http) {
+            function CalendarController($scope, $http, RootFactory) {
                 _super.call(this);
                 this.$scope = $scope;
                 this.$http = $http;
+                this.RootFactory = RootFactory;
                 this.content = new Content();
+                $customScope = this;
                 var $this = this;
                 this.$scope.$on('language', function (event, lang) {
                     $this.translate(lang);
                 });
                 $this.translate(this.$scope.mc.lang);
+                this.initJquery();
             }
             CalendarController.prototype.translate = function (lang) {
-                var result = this.loadEvents(lang);
+                this.currentLang = lang;
+                result = this.loadEvents(lang);
                 $('#calendar-holder').empty().append('<div id="calendar"></div>');
                 if (lang == g.Languages.Mk) {
                     $("#calendar").fullCalendar({
@@ -62,12 +66,18 @@ var SiteScript;
                                 events.push({
                                     _id: result[i].id,
                                     title: result[i].title,
+                                    description: result[i].description,
                                     start: result[i].start,
                                     end: result[i].end,
                                     allDay: false
                                 });
                             }
                             callback(events);
+                        },
+                        eventRender: function (event, element) {
+                            if (event.description != '') {
+                                element.find('.fc-title').append('<div class="glyphicon glyphicon-info-sign" style="position: absolute;top: 2px;right:2px;"></div>');
+                            }
                         },
                         select: function (start, end) {
                             startDate = start._d;
@@ -76,7 +86,12 @@ var SiteScript;
                         },
                         eventClick: function (calEvent, jsEvent, view) {
                             if (jsEvent.type == 'click') {
-                                $("#content").modal("show");
+                                $customScope.$http.post($customScope.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then(function (response) {
+                                    if (response.data) {
+                                        $customScope.content = response.data;
+                                        $("#content").modal("show");
+                                    }
+                                });
                             }
                         },
                         eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
@@ -84,7 +99,7 @@ var SiteScript;
                                 contentType: 'application/json; charset=utf-8',
                                 dataType: 'json',
                                 type: 'POST',
-                                url: '/Home/UpdateCalendarEvent',
+                                url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
                                 data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
                                 cache: false,
                                 success: function (data) {
@@ -99,7 +114,7 @@ var SiteScript;
                                 contentType: 'application/json; charset=utf-8',
                                 dataType: 'json',
                                 type: 'POST',
-                                url: '/Home/UpdateCalendarEvent',
+                                url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
                                 data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
                                 cache: false,
                                 success: function (data) {
@@ -108,11 +123,6 @@ var SiteScript;
                                 failure: function (response) {
                                 }
                             });
-                            //CalendarService.UpdateEventDate(event._id, moment(event.start).format("YYYY-MM-DD HH:mm"), moment(event.end).format("YYYY-MM-DD HH:mm")).then(function (data) {
-                            //    if (data[0] == false) {
-                            //        revertFunc();
-                            //    }
-                            //});
                         }
                     });
                 }
@@ -138,9 +148,9 @@ var SiteScript;
                         defaultEventMinutes: 60,
                         buttonText: {
                             today: "aujourd'hui",
-                            month: 'месец',
-                            week: 'недела',
-                            day: 'ден'
+                            month: 'mois',
+                            week: 'dimanche',
+                            day: 'jour'
                         },
                         events: function (start, end, timezone, callback) {
                             var events = [];
@@ -148,12 +158,63 @@ var SiteScript;
                                 events.push({
                                     _id: result[i].id,
                                     title: result[i].title,
+                                    description: result[i].description,
                                     start: result[i].start,
                                     end: result[i].end,
                                     allDay: false
                                 });
                             }
                             callback(events);
+                        },
+                        eventRender: function (event, element) {
+                            if (event.description != '') {
+                                element.find('.fc-title').append('<div class="glyphicon glyphicon-info-sign" style="position: absolute;top: 2px;right:2px;"></div>');
+                            }
+                        },
+                        select: function (start, end) {
+                            startDate = start._d;
+                            endDate = end._d;
+                            $("#content").modal("show");
+                        },
+                        eventClick: function (calEvent, jsEvent, view) {
+                            if (jsEvent.type == 'click') {
+                                $customScope.$http.post(this.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then(function (response) {
+                                    if (response.data) {
+                                        $customScope.content = response.data;
+                                        $("#content").modal("show");
+                                    }
+                                });
+                            }
+                        },
+                        eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+                            $.ajax({
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                type: 'POST',
+                                url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
+                                data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
+                                cache: false,
+                                success: function (data) {
+                                    revertFunc();
+                                },
+                                failure: function (response) {
+                                }
+                            });
+                        },
+                        eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+                            $.ajax({
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                type: 'POST',
+                                url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
+                                data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
+                                cache: false,
+                                success: function (data) {
+                                    revertFunc();
+                                },
+                                failure: function (response) {
+                                }
+                            });
                         }
                     });
                 }
@@ -161,7 +222,7 @@ var SiteScript;
             CalendarController.prototype.loadEvents = function (lang) {
                 var response;
                 $.ajax({
-                    url: "/Home/CalendarEvents",
+                    url: this.RootFactory.RootUrl() + "Home/CalendarEvents",
                     method: 'GET',
                     data: { lang: lang },
                     async: false,
@@ -173,19 +234,50 @@ var SiteScript;
             };
             CalendarController.prototype.saveItem = function (item) {
                 var _this = this;
-                item.start = startDate;
-                item.end = endDate;
-                this.$http.post("/Home/SaveCalendarEvent", { item: item }).then(function (response) {
-                    if (response.data) {
-                        window.location.reload();
-                        _this.clearForm();
-                    }
-                });
+                if (item.Id) {
+                    this.$http.post(this.RootFactory.RootUrl() + "Home/UpdateCalendarEvent", { item: item }).then(function (response) {
+                        if (response.data) {
+                            result = _this.loadEvents(_this.$scope.mc.lang);
+                            $('#calendar').fullCalendar('refetchEvents');
+                            $("#content").modal("hide");
+                        }
+                    });
+                }
+                else {
+                    item.start = startDate;
+                    item.end = endDate;
+                    this.$http.post(this.RootFactory.RootUrl() + "Home/SaveCalendarEvent", { item: item }).then(function (response) {
+                        if (response.data) {
+                            result = _this.loadEvents(_this.$scope.mc.lang);
+                            $('#calendar').fullCalendar('refetchEvents');
+                            $("#content").modal("hide");
+                        }
+                    });
+                }
             };
             CalendarController.prototype.clearForm = function () {
                 this.content = null;
                 startDate = null;
                 endDate = null;
+            };
+            CalendarController.prototype.deleteEvent = function (item) {
+                var _this = this;
+                var c = confirm("Дали сте сигурни за бришење на елементот");
+                if (c) {
+                    this.$http.post(this.RootFactory.RootUrl() + "Home/DeleteCalendarEvent", { item: item }).then(function (response) {
+                        if (response.data) {
+                            result = _this.loadEvents(_this.$scope.mc.lang);
+                            $('#calendar').fullCalendar('refetchEvents');
+                            $("#content").modal("hide");
+                        }
+                    });
+                }
+            };
+            CalendarController.prototype.initJquery = function () {
+                $("#content").on("hidden.bs.modal", function () {
+                    $(this).find('form')[0].reset();
+                    $customScope.$scope.cc.content = null;
+                });
             };
             return CalendarController;
         })(g.Global);

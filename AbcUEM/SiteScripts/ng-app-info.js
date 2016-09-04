@@ -16,11 +16,12 @@ var SiteScript;
         })();
         var InfoController = (function (_super) {
             __extends(InfoController, _super);
-            function InfoController($scope, $http, $sce) {
+            function InfoController($scope, $http, $sce, RootFactory) {
                 _super.call(this);
                 this.$scope = $scope;
                 this.$http = $http;
                 this.$sce = $sce;
+                this.RootFactory = RootFactory;
                 this.content = new Content();
                 var $this = this;
                 this.$scope.$on('language', function (event, lang) {
@@ -45,7 +46,7 @@ var SiteScript;
             InfoController.prototype.editItem = function (item, section) {
                 var _this = this;
                 this.section = section;
-                this.$http.get("/Home/GetContent?Id=" + item.Id).then(function (response) {
+                this.$http.get(this.RootFactory.RootUrl() + "Home/GetContent?Id=" + item.Id).then(function (response) {
                     _this.content = response.data;
                     $("#addContent").modal("show");
                 });
@@ -57,7 +58,7 @@ var SiteScript;
             InfoController.prototype.saveItem = function (item) {
                 var _this = this;
                 if (item.Id) {
-                    this.$http.post("/Home/UpdateContent", { item: item }).then(function (response) {
+                    this.$http.post(this.RootFactory.RootUrl() + "Home/UpdateContent", { item: item }).then(function (response) {
                         if (response.data) {
                             if (_this.section == "InfoBoardDetails") {
                                 _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);
@@ -73,7 +74,7 @@ var SiteScript;
                 else {
                     item.PageId = 4;
                     item.TagId = this.section;
-                    this.$http.post("/Home/AddContent", { item: item }).then(function (response) {
+                    this.$http.post(this.RootFactory.RootUrl() + "Home/AddContent", { item: item }).then(function (response) {
                         if (response.data) {
                             if (_this.section == "InfoBoardDetails") {
                                 _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);
@@ -100,7 +101,7 @@ var SiteScript;
             };
             InfoController.prototype.confirm = function () {
                 var _this = this;
-                this.$http.post("/Home/DeleteContent", { Id: this.id }).then(function (response) {
+                this.$http.post(this.RootFactory.RootUrl() + "Home/DeleteContent", { Id: this.id }).then(function (response) {
                     if (response.data) {
                         if (_this.section == "InfoBoardDetails") {
                             _this.translateInfoBoardDetails(g.Pages.Info, _this.$scope.mc.lang, _this.section);

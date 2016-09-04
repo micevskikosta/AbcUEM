@@ -20,7 +20,7 @@ namespace SiteScript.Info {
         private InfoArray: any;
         private InfoBoardArray: any;
         private content: Content = new Content();
-        constructor(public $scope, public $http: ng.IHttpService, public $sce: ng.ISCEService) {
+        constructor(public $scope, public $http: ng.IHttpService, public $sce: ng.ISCEService, public RootFactory: any) {
             super();
             var $this = this;
             this.$scope.$on('language', function (event, lang) {
@@ -44,7 +44,7 @@ namespace SiteScript.Info {
 
         private editItem(item: Content, section) {
             this.section = section;
-            this.$http.get("/Home/GetContent?Id=" + item.Id).then((response: any) => {
+            this.$http.get(this.RootFactory.RootUrl() + "Home/GetContent?Id=" + item.Id).then((response: any) => {
                 this.content = response.data;
                 $("#addContent").modal("show");
             });
@@ -57,7 +57,7 @@ namespace SiteScript.Info {
 
         private saveItem(item: Content) {
             if (item.Id) {
-                this.$http.post("/Home/UpdateContent", { item: item }).then((response: any) => {
+                this.$http.post(this.RootFactory.RootUrl() + "Home/UpdateContent", { item: item }).then((response: any) => {
                     if (response.data) {
                         if (this.section == "InfoBoardDetails") {
                             this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);
@@ -73,7 +73,7 @@ namespace SiteScript.Info {
             else {
                 item.PageId = 4;
                 item.TagId = this.section;
-                this.$http.post("/Home/AddContent", { item: item }).then((response: any) => {
+                this.$http.post(this.RootFactory.RootUrl() + "Home/AddContent", { item: item }).then((response: any) => {
                     if (response.data) {
                         if (this.section == "InfoBoardDetails") {
                             this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);
@@ -106,7 +106,7 @@ namespace SiteScript.Info {
         }
 
         private confirm() {
-            this.$http.post("/Home/DeleteContent", { Id: this.id }).then((response: any) => {
+            this.$http.post(this.RootFactory.RootUrl() + "Home/DeleteContent", { Id: this.id }).then((response: any) => {
                 if (response.data) {
                     if (this.section == "InfoBoardDetails") {
                         this.translateInfoBoardDetails(g.Pages.Info, this.$scope.mc.lang, this.section);

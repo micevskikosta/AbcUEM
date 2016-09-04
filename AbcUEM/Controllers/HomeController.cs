@@ -86,7 +86,7 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleMk,
-                        descriptio = x.DescriptionMk,
+                        description = x.DescriptionMk.Equals(null) ? "" : x.DescriptionMk,
                         start = x.start,
                         end = x.end
                     }).ToList(), JsonRequestBehavior.AllowGet);
@@ -97,7 +97,7 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleFr,
-                        descriptio = x.DescriptionFr,
+                        description = x.DescriptionFr.Equals(null) ? "" : x.DescriptionFr,
                         start = x.start,
                         end = x.end
                     }).ToList(), JsonRequestBehavior.AllowGet);
@@ -159,6 +159,7 @@ namespace AbcUEM.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult AddContent(Translates item)
         {
             bool res = true;
@@ -177,6 +178,7 @@ namespace AbcUEM.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         public ActionResult UpdateContent(Translates item)
         {
             bool res = true;
@@ -204,6 +206,7 @@ namespace AbcUEM.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult DeleteContent(Translates item)
         {
             using (AbcUEMDbEntities db = new AbcUEMDbEntities())
@@ -222,6 +225,7 @@ namespace AbcUEM.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult SaveCalendarEvent(Calendar item)
         {
             bool res = true;
@@ -240,6 +244,7 @@ namespace AbcUEM.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         public ActionResult UpdateCalendarEvent(Calendar item)
         {
             bool res = true;
@@ -247,9 +252,41 @@ namespace AbcUEM.Controllers
             {
                 using (AbcUEMDbEntities db = new AbcUEMDbEntities())
                 {
-                    var obj = db.Calendar.Find(item.Id);
-                    obj.start = item.start;
-                    obj.end = item.end;
+                    if (item.start == null || item.end == null)
+                    {
+                        var obj = db.Calendar.Find(item.Id);
+                        obj.TitleFr = item.TitleFr;
+                        obj.TitleMk = item.TitleMk;
+                        obj.DescriptionFr = item.DescriptionFr;
+                        obj.DescriptionMk = item.DescriptionMk;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        var obj = db.Calendar.Find(item.Id);
+                        obj.start = item.start;
+                        obj.end = item.end;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        [Authorize]
+        public ActionResult DeleteCalendarEvent(Calendar item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    db.Calendar.Remove(db.Calendar.Find(item.Id));
                     db.SaveChanges();
                 }
             }
@@ -258,6 +295,14 @@ namespace AbcUEM.Controllers
                 res = false;
             }
             return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetCalendarEvent(Calendar item)
+        {
+            using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+            {
+                return Json(db.Calendar.Where(x=>x.Id == item.Id).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

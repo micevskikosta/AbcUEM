@@ -46,7 +46,7 @@ namespace SiteScripts.Master {
 
     export class MasterController extends g.Global {
         public masterLang: any;
-        constructor(public $http: ng.IHttpService, public $rootScope: ng.IRootScopeService) {
+        constructor(public $http: ng.IHttpService, public $rootScope: ng.IRootScopeService, public RootFactory: any) {
             super();
             this.setLang(g.Languages.Mk);
             this.getTranslate(g.Pages.Master, this.lang);
@@ -56,7 +56,7 @@ namespace SiteScripts.Master {
             this.getTranslate(g.Pages.Master, lang);
         }
         public getTranslate(page: number, lang: number): void {
-            this.$http.get("/Home/Translate?page=" + page + "&lang=" + lang).then((response: any) => {
+            this.$http.get(this.RootFactory.RootUrl() + "Home/Translate?page=" + page + "&lang=" + lang).then((response: any) => {
                 this.masterLang = response.data;
             });
         }
