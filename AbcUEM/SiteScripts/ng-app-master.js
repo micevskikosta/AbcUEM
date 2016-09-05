@@ -38,6 +38,20 @@ var SiteScripts;
             })
                 .otherwise('/Info');
         });
+        //angular.module('AbcUEM').directive('file', function () {
+        //    return {
+        //        scope: {
+        //            file: '='
+        //        },
+        //        link: function (scope: any, el: any, attrs: any) {
+        //            el.bind('change', function (event: any) {
+        //                var file = event.target.files[0];
+        //                scope.file = file ? file : undefined;
+        //                scope.$apply();
+        //            });
+        //        }
+        //    };
+        //});
         //    .run(function ($rootScope, $location) {
         //    $rootScope.$watch(function () {
         //        return $location.path();
@@ -72,3 +86,4 @@ var SiteScripts;
         angular.module("AbcUEM").controller("MasterController", MasterController);
     })(Master = SiteScripts.Master || (SiteScripts.Master = {}));
 })(SiteScripts || (SiteScripts = {}));
+//# sourceMappingURL=ng-app-master.js.map

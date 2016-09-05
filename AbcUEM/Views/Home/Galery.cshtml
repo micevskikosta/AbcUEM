@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -11,22 +10,35 @@
                     <a ng-click="gc.returnToRoot()">{{gc.galleryHomeButton}}</a>
                 </li>
                 <li ng-show="!gc.rootGalery" class="active">{{gc.rootGaleryName}}</li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div style="position: absolute;top: 21px;right: 40px;">
+                        <button ng-show="gc.rootGalery" class="btn btn-default" ng-click="gc.addGalery()">Додади галерија</button>
+                        <button ng-show="!gc.rootGalery" class="btn btn-default" ng-click="gc.addImages()">Додади слика</button>
+                    </div>
+                }
             </ol>
         </div>
         <div class="row" ng-show="gc.rootGalery">
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-repeat="img in gc.galleryMaster" ng-click="gc.viewImage(img)">
-                <a class="thumbnail">
-                    <img src="~/Images/Gallery/Master/{{img.id}}.jpg" />
-                    {{img.title}}
-                </a>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-repeat="img in gc.galleryMaster">
+                <button style="position: absolute;right: 15px;" ng-click="gc.updateGalery(img)">Опции</button>
+                <div ng-click="gc.viewImage(img)">
+                    <a class="thumbnail">
+                        <img src="~/Images/Gallery/Master/{{img.id}}.jpg" />
+                        {{img.title}}
+                    </a>
+                </div>
             </div>
         </div>
         <div class="row" ng-show="!gc.rootGalery">
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-repeat="img in gc.galleryDetails" ng-click="gc.fullImg(img)">
-                <a class="thumbnail">
-                    <img src="~/Images/Gallery/Details/{{img.id}}.jpg" />
-                    {{img.title}}
-                </a>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-repeat="img in gc.galleryDetails">
+                <button style="position: absolute;right: 15px;" ng-click="gc.updateImage(img)">Опции</button>
+                <div ng-click="gc.fullImg(img)">
+                    <a class="thumbnail">
+                        <img src="~/Images/Gallery/Details/{{img.id}}.jpg" />
+                        {{img.title}}
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -44,5 +56,138 @@
             </div>
         </div>
     </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+    <!-- Modal -->
+        <div class="modal fade" id="galeryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="uploadFile">
+                            <input hidden style="display:none" ng-model="gc.content.Id">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                                <input name="TitleMk" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                                <input name="TitleFr" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Слика:</label>
+                                <input name="file" type="file" class="form-control" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cc.clearForm()">Откажи</button>
+                        <button type="button" class="btn btn-primary" ng-click="gc.saveItem()">Зачувај</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Modal -->
+        <div class="modal fade" id="updateGaleryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateUploadFile">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                                <input id="TitleMk" name="TitleMk" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                                <input id="TitleFr" name="TitleFr" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Слика:</label>
+                                <input name="file" type="file" class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="gc.deleteGalery()">Избриши</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="gc.clearForm()">Откажи</button>
+                        <button type="button" class="btn btn-primary" ng-click="gc.updateItem()">Зачувај</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="uploadImageFile">
+                            <input hidden style="display:none" ng-model="gc.content.Id">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                                <input name="TitleMk" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                                <input name="TitleFr" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Слика:</label>
+                                <input name="file" type="file" class="form-control" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cc.clearForm()">Откажи</button>
+                        <button type="button" class="btn btn-primary" ng-click="gc.saveImages()">Зачувај</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            
+        <div class="modal fade" id="updateSubGaleryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type = "button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateSubFile">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Мк:</label>
+                                <input id="subTitleMk" name="TitleMk" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Наслов Fr:</label>
+                                <input id="subTitleFr" name="TitleFr" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Слика:</label>
+                                <input name="file" type="file" class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="gc.deleteSubImage()">Избриши</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="gc.clearForm()">Откажи</button>
+                        <button type="button" class="btn btn-primary" ng-click="gc.updateSubItem()">Зачувај</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
 
 </div>

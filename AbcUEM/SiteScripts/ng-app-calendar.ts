@@ -187,7 +187,7 @@ namespace SiteScript.Galendar {
                     },
                     eventClick: function (calEvent, jsEvent, view) {
                         if (jsEvent.type == 'click') {
-                            $customScope.$http.post(this.RootFactory.RootUrl() +"Home/GetCalendarEvent", { id: calEvent._id }).then((response: any) => {
+                            $customScope.$http.post($customScope.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then((response: any) => {
                                 if (response.data) {
                                     $customScope.content = response.data;
                                     $("#content").modal("show");
@@ -200,7 +200,7 @@ namespace SiteScript.Galendar {
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             type: 'POST',
-                            url: $customScope.RootFactory.RootUrl() +'Home/UpdateCalendarEvent',
+                            url: $customScope.RootFactory.RootUrl() + 'Home/UpdateCalendarEvent',
                             data: JSON.stringify({ id: event._id, start: event.start._d, end: event.end._d }),
                             cache: false,
                             success: function (data) {

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using AbcUEM.Models;
 using AbcUEM.Enums;
+using System.IO;
 
 namespace AbcUEM.Controllers
 {
@@ -117,7 +118,9 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleMk,
-                        uploaded = x.SysDate
+                        uploaded = x.SysDate,
+                        x.TitleFr,
+                        x.TitleMk
                     }).ToList(), JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -126,7 +129,9 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleFr,
-                        uploaded = x.SysDate
+                        uploaded = x.SysDate,
+                        x.TitleFr,
+                        x.TitleMk
                     }).ToList(), JsonRequestBehavior.AllowGet);
 
                 }
@@ -143,7 +148,9 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleMk,
-                        uploaded = x.SysDate
+                        uploaded = x.SysDate,
+                        x.TitleFr,
+                        x.TitleMk
                     }).ToList(), JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -152,7 +159,9 @@ namespace AbcUEM.Controllers
                     {
                         id = x.Id,
                         title = x.TitleFr,
-                        uploaded = x.SysDate
+                        uploaded = x.SysDate,
+                        x.TitleFr,
+                        x.TitleMk
                     }).ToList(), JsonRequestBehavior.AllowGet);
 
                 }
@@ -277,7 +286,7 @@ namespace AbcUEM.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [Authorize]
         public ActionResult DeleteCalendarEvent(Calendar item)
         {
@@ -301,8 +310,192 @@ namespace AbcUEM.Controllers
         {
             using (AbcUEMDbEntities db = new AbcUEMDbEntities())
             {
-                return Json(db.Calendar.Where(x=>x.Id == item.Id).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+                return Json(db.Calendar.Where(x => x.Id == item.Id).FirstOrDefault(), JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        [Authorize]
+        public ActionResult SaveGaleryImage(GalleryMaster item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    if (!Directory.Exists(Server.MapPath("~/Images/Gallery/Master")))
+                    {
+                        Directory.CreateDirectory(Server.MapPath("~/Images/Gallery/Master"));
+                    }
+
+                    HttpPostedFileBase file = Request.Files[0];
+
+                    var i = db.GalleryMaster.Add(item);
+                    db.SaveChanges();
+                    string extension = Path.GetExtension(file.FileName);
+
+                    var path = Path.Combine(Server.MapPath("~/Images/Gallery/Master/"), i.Id + ".jpg");
+
+                    file.SaveAs(path);
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult UpdateGaleryImage(GalleryMaster item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+
+                    HttpPostedFileBase file = Request.Files[0];
+                    if (file.ContentLength > 0)
+                    {
+                        var path = Server.MapPath("~/Images/Gallery/Master/" + item.Id + ".jpg");
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                        file.SaveAs(path);
+                    }
+
+                    var obj = db.GalleryMaster.Find(item.Id);
+                    db.Entry(obj).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult DeleteGalery(GalleryMaster item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    db.GalleryMaster.Remove(db.GalleryMaster.Find(item.Id));
+                    var pathMaster = Server.MapPath("~/Images/Gallery/Master/" + item.Id + ".jpg");
+                    if (System.IO.File.Exists(pathMaster))
+                    {
+                        System.IO.File.Delete(pathMaster);
+                    }
+                    foreach (var i in db.GalleryDetails.Where(x=>x.GalleryMasterId == item.Id))
+                    {
+                        var pathDetails = Server.MapPath("~/Images/Gallery/Details/" + i.Id + ".jpg");
+                        if (System.IO.File.Exists(pathDetails))
+                        {
+                            System.IO.File.Delete(pathDetails);
+                        }
+                        db.GalleryDetails.Remove(db.GalleryDetails.Find(i.Id));
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult SaveImages(GalleryDetails item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    if (!Directory.Exists(Server.MapPath("~/Images/Gallery/Details")))
+                    {
+                        Directory.CreateDirectory(Server.MapPath("~/Images/Gallery/Details"));
+                    }
+
+                    HttpPostedFileBase file = Request.Files[0];
+
+                    var i = db.GalleryDetails.Add(item);
+                    db.SaveChanges();
+                    string extension = Path.GetExtension(file.FileName);
+
+                    var path = Path.Combine(Server.MapPath("~/Images/Gallery/Details/"), i.Id + ".jpg");
+
+                    file.SaveAs(path);
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(item.GalleryMasterId, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult UpdateSubGaleryImage(GalleryDetails item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+
+                    HttpPostedFileBase file = Request.Files[0];
+                    if (file.ContentLength > 0)
+                    {
+                        var path = Server.MapPath("~/Images/Gallery/Details/" + item.Id + ".jpg");
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                        file.SaveAs(path);
+                    }
+
+                    var obj = db.GalleryDetails.Find(item.Id);
+                    db.Entry(obj).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(item.GalleryMasterId, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult DeleteImage(GalleryDetails item)
+        {
+            bool res = true;
+            try
+            {
+                using (AbcUEMDbEntities db = new AbcUEMDbEntities())
+                {
+                    db.GalleryDetails.Remove(db.GalleryDetails.Find(item.Id));
+                    var pathMaster = Server.MapPath("~/Images/Gallery/Details/" + item.Id + ".jpg");
+                    if (System.IO.File.Exists(pathMaster))
+                    {
+                        System.IO.File.Delete(pathMaster);
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch
+            {
+                res = false;
+            }
+            return Json(item.GalleryMasterId, JsonRequestBehavior.AllowGet);
         }
 
     }

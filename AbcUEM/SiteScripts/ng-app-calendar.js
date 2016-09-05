@@ -178,7 +178,7 @@ var SiteScript;
                         },
                         eventClick: function (calEvent, jsEvent, view) {
                             if (jsEvent.type == 'click') {
-                                $customScope.$http.post(this.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then(function (response) {
+                                $customScope.$http.post($customScope.RootFactory.RootUrl() + "Home/GetCalendarEvent", { id: calEvent._id }).then(function (response) {
                                     if (response.data) {
                                         $customScope.content = response.data;
                                         $("#content").modal("show");
@@ -284,3 +284,4 @@ var SiteScript;
         angular.module("AbcUEM").controller("CalendarController", CalendarController);
     })(Galendar = SiteScript.Galendar || (SiteScript.Galendar = {}));
 })(SiteScript || (SiteScript = {}));
+//# sourceMappingURL=ng-app-calendar.js.map

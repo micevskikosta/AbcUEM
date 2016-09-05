@@ -28,7 +28,7 @@
             @if (User.IsInRole("Administrator"))
             {
                 <div>
-                    <button class="btn btn-default" ng-click="ic.editItem(info, 'InfoBoard')">Додади</button>
+                    <button class="btn btn-default" ng-click="ic.addContent('InfoBoard')">Додади</button>
                 </div>
             }
             <div class="bs-callout bs-callout-warning position-relative" id="callout-stacked-modals" ng-repeat="info in ic.InfoArray">

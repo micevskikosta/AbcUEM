@@ -34,6 +34,21 @@ namespace SiteScripts.Master {
             })
             .otherwise('/Info')
     });
+
+    //angular.module('AbcUEM').directive('file', function () {
+    //    return {
+    //        scope: {
+    //            file: '='
+    //        },
+    //        link: function (scope: any, el: any, attrs: any) {
+    //            el.bind('change', function (event: any) {
+    //                var file = event.target.files[0];
+    //                scope.file = file ? file : undefined;
+    //                scope.$apply();
+    //            });
+    //        }
+    //    };
+    //});
     //    .run(function ($rootScope, $location) {
     //    $rootScope.$watch(function () {
     //        return $location.path();

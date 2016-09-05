@@ -1,5 +1,7 @@
 ﻿/// <reference path="_references.ts" />
 
+declare var rootUrl: any;
+
 namespace SiteScripts.Global {
     export enum Languages { Mk, Fr }
     export enum Pages { Master = 1, Schools = 2, About = 3, Info = 4 }
@@ -12,7 +14,6 @@ namespace SiteScripts.Global {
             this.lang = lang;
             this.$rootScope.$broadcast('language', this.lang);
         }
-
         public getTranslateAsync(page: number, lang: number, tagId: string): angular.IPromise<any> {
             return this.$http.get(rootUrl + "Home/Translate?page=" + page + "&lang=" + lang + "&tagId=" + tagId);
         }
